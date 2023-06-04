@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react"
-import { TextInput, Label, Button } from "flowbite-react";
+
+import { InputLabel, TextField, Button } from '@mui/material';
 
 import { checkUsernameExistsCall, updateUserCall } from "@/utils/user-api";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
-export default function ChooseUsername({  }) {
+export default function AccountChooseUsername({  }) {
     const { data: session } = useSession()
     const { push } = useRouter();
 
@@ -43,18 +45,20 @@ export default function ChooseUsername({  }) {
     return (
         <>
             { error && <p>{error}</p>}
-            <Label
-                htmlFor="username"
-                value="Choose your username:"
-            />
-            <TextInput
+            <TextField
                 id="username"
-                placeholder=""
-                required={true}
-                color={!username ? 'gray' : available ? 'success' : 'failure'}
+                label="Username"
+                color={!username ? '' : available ? 'success' : 'warning'}
+                defaultValue=""
                 onChange={(e) => setUsername(e.target.value)}
             />
-            <Button disabled={!available} onClick={selectUsername}>Select Username</Button>
+            <Button 
+                variant="contained"
+                onClick={selectUsername}
+                disabled={!available || username.length <= 3}
+            >
+                Choose Username
+            </Button>
         </>
     )
   }

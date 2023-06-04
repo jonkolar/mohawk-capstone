@@ -1,14 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import { db } from "@/utils/db-server"
 
 export default async function CheckUsernameHandler(req, res) {
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
   let username = req.body.username
 
-  const prisma = new PrismaClient()
-
   let available = true
-  const user = await prisma.user.findMany({
+  const user = await db.user.findMany({
     where: {
       username: username
     }

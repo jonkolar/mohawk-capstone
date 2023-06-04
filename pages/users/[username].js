@@ -1,8 +1,10 @@
 import { useSession } from "next-auth/react"
 import { PrismaClient } from "@prisma/client";
-import { Avatar, Badge } from "flowbite-react";
+
+import { Avatar, Stack } from "@mui/material";
 
 import TopNavbar from "@/components/TopNavbar"
+import AliasList from "@/components/AliasList";
 
 export default function UsersPage({ user }) {
     if (!user) {
@@ -13,24 +15,25 @@ export default function UsersPage({ user }) {
 
     const isOwnProfile = session ? session.user.username == user.username : false
 
+    console.log(user.aliases)
+
     return (
-        <> 
+        <>
             <TopNavbar session={session}/>
-            <div class="flex">
+            <Stack
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+            >
+                <h1>{user.username}{isOwnProfile && ' (Your Profile)'}</h1>
                 <Avatar 
-                    img={user.image}
-                    size="xl"
-                    rounded
+                    src={user.image}
+                    sx={{ width: 100, height: 100 }}
                 />
-                <div>
-                    <h1>{user.username} {isOwnProfile && "(YOUR PROFILE)"}</h1>
-                    <ul>
-                        {user.aliases.map(alias => {
-                            return <li><Badge color="gray" size="sm">{alias.game.name + ' : ' + alias.alias}</Badge></li>
-                        })}
-                    </ul>
-                </div>
-            </div>
+
+                <AliasList aliases={user.aliases}/>
+            </Stack>
         </>
     )
 }

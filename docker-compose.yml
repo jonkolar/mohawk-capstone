@@ -1,0 +1,21 @@
+version: '3'
+
+services: 
+  app:
+    image: capstone-nextjs
+    build: .
+    ports: 
+      - "3000:3000"
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - "6033:3306"
+    volumes:
+      - capstone_mysql_data:/var/lib/mysql
+volumes:
+  capstone_mysql_data:
+
+    
+    

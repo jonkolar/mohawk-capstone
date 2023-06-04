@@ -1,52 +1,155 @@
 import { useSession, signIn, signOut } from "next-auth/react"
-import Link from 'next/link';
-import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 
-export default function TopNavbar({ }) {
-    const { data: session } = useSession()
+import Link from "./Link";
+import LoginButton from "./LoginButton";
 
-    return (
-    <Navbar
-      fluid={true}
-      rounded={true}
-    >
-    <Navbar.Brand href="/">
-      <img
-        src="https://flowbite.com/docs/images/logo.svg"
-        className="mr-3 h-6 sm:h-9"
-        alt="Flowbite Logo"
-      />
-    </Navbar.Brand>
-    { session ?
-    <Dropdown
-        arrowIcon={false}
-        inline={true}
-        label={<Avatar alt="User settings" img={session.user.image} rounded={true}/>}
-      >
-        <Dropdown.Header>
-          <span className="block text-sm">
-            {session.user.username ? <Link href={"/users/" + session.user.username}>{session.user.username}</Link> : <Link href={"/profile/choose-username"}>Choose Username</Link>}
-          </span>
-          <span className="block truncate text-sm font-medium">
-            {session.user.email}
-          </span>
-        </Dropdown.Header>
-        <Dropdown.Item>
-          <Link href={"/profile/me"}>Profile</Link>
-        </Dropdown.Item>
-        <Dropdown.Item>
-          <Link href={"/profile/teams"}>Teams</Link>
-        </Dropdown.Item>
-        <Dropdown.Item>
-          Settings
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item>
-          <span onClick={() => signOut()}>Sign out</span>
-        </Dropdown.Item>
-      </Dropdown>
-    :
-     <Button color="dark" onClick={() => signIn('discord', {callbackUrl: window.location.href})}>Sign In</Button>}
-  </Navbar>
-    )
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+
+function ResponsiveAppBar() {
+  const { data: session } = useSession()
+
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+            </IconButton>
+          </Box>
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            { session ?
+            <>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Avatar" src={session.user.image} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+              {!session.user.username ? 
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link href={"/account/choose-username"}>
+                    <Typography textAlign="center">Choose Username</Typography>
+                  </Link>
+                </MenuItem>
+                :
+                <MenuItem
+                  sx={{"&:hover": {backgroundColor: 'transparent', cursor: 'default' }}}
+                >
+                    <Typography textAlign="center">Signed in: {session.user.username}</Typography>
+                </MenuItem>
+              }
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link href={"/users/" + session.user.username}>
+                    <Typography textAlign="center">Profile</Typography>
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={() => signOut()}>
+                    <Typography textAlign="center">Sign Out</Typography>
+                </MenuItem>
+              </Menu>
+            </>
+            :
+            <Button variant="contained" onClick={() => signIn('discord')}>Sign In</Button>
+          }
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
 }
+export default ResponsiveAppBar;

@@ -1,20 +1,27 @@
+import { useState } from "react";
 import { useSession } from "next-auth/react"
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { useRouter } from 'next/router';
 import { PrismaClient } from "@prisma/client";
-import { Avatar, Badge } from "flowbite-react";
 
 import TopNavbar from "@/components/TopNavbar"
+import CreateTeamModal from "@/components/CreateTeamModal";
 
-export default function ProfileMe({ session }) {
+export default function AccountTeams({ session }) {
+    const [showCreateTeamModal, setShowCreateTeamModal] = useState(false)
 
     return (
         <> 
             <TopNavbar/>
-            <div class="flex">
-                <h1>MY PROFILE PAGE</h1>
+            <div className="flex">
+                <h1>MY TEAMS</h1>
             </div>
+            <div>
+                <Button>Create Team</Button>
+            </div>
+
+            <CreateTeamModal />
         </>
     )
 }
