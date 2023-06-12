@@ -2,7 +2,6 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getProviders, signIn } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./api/auth/[...nextauth]";
-import { PrismaClient } from "@prisma/client";
 
 export default function SignIn({ providers }){
   return (

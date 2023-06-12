@@ -58,6 +58,7 @@ model User {
   sessions      Session[]
   aliases       Alias[]
   teams         Team[]
+  players       Player[]
 }
 
 model Game {
@@ -65,6 +66,7 @@ model Game {
   name    String
   image   String?
   aliases Alias[]
+  teams Team[]
 }
 
 model Alias {
@@ -75,17 +77,20 @@ model Alias {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  players Player[]
 }
 
 model Team {
   id          String @id @default(cuid())
+  name        String
   ownerId     String
   gameId      String
   logo        String?
   description String?
-  players     Player[]    
+  players     Player[]
 
-  user User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }
 
 model Player {
@@ -94,5 +99,7 @@ model Player {
   teamId      String
   aliasId     String
 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  alias Alias @relation(fields: [aliasId], references: [id], onDelete: Cascade)
 }

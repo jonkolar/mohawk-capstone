@@ -138,6 +138,11 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">Profile</Typography>
                   </Link>
                 </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                <Link href={"/account/teams"}>
+                    <Typography textAlign="center">Teams</Typography>
+                  </Link>
+                </MenuItem>
                 <MenuItem onClick={() => signOut()}>
                     <Typography textAlign="center">Sign Out</Typography>
                 </MenuItem>

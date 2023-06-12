@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react"
-import { PrismaClient } from "@prisma/client";
+import { db } from "@/utils/db-server";
 
 import { Avatar, Stack } from "@mui/material";
 
@@ -42,10 +42,8 @@ export default function UsersPage({ user }) {
 // This gets called on every request
 export async function getServerSideProps({ req, res, query }) {
     const username = query.username
-
-    const prisma = new PrismaClient()
-
-    const user = await prisma.user.findUnique({
+    
+    const user = await db.user.findUnique({
         where: {
             username: username
         },
