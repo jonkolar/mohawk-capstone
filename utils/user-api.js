@@ -17,7 +17,7 @@ export async function checkUsernameExistsCall(username) {
 export async function updateUserCall(email, updateData) {
     let payload = {
         email: email,
-        update: updateData  
+        update: updateData
     }
 
     const response = await fetch(`../api/user/update-user`, {

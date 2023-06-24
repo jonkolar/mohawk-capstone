@@ -14,7 +14,7 @@ export default function TeamList({ teams }) {
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         { teams.map(team => 
-            <ListItem>
+            <ListItem key={team.id}>
                 <ListItemAvatar>
                 <Avatar>
                     <GroupsIcon />

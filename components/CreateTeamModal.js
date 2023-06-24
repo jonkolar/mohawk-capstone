@@ -10,6 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 
+import { createTeamCall } from "@/utils/team-api";
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -20,22 +22,33 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    borderRadius: 5
+    borderRadius: 5,
+    //
+    display: 'flex',
+    justifyContent: 'center',
 };
 
-export default function CreateTeamModal({ session, open, setModal, games }) {
+export default function CreateTeamModal({ user, open, setModal, games }) {
     const [name, setName] = useState('')
-    const [game, setGame] = useState(games[0].id)
+    const [gameId, setGameId] = useState(games[0].id)
     const [description, setDescription] = useState('')
 
     const handleClose = () => {
 
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // submit form to backend
+        await createTeamCall(user.email, name, gameId, description)
+            .then(response => {
+                if (response) {
+                    setModal(false)
+                    location.reload()
+                } else {
+                    console.log('something went wrong')
+                }
+            })
     }
 
     return (
@@ -57,8 +70,8 @@ export default function CreateTeamModal({ session, open, setModal, games }) {
                 <Select
                     labelId="team-game-label"
                     id="team-game"
-                    value={game}
-                    onChange={(e) => {setGame(e.target.value)}}
+                    value={gameId}
+                    onChange={(e) => {setGameId(e.target.value)}}
                 >
                     {games.map((game) => 
                         <MenuItem key={game.id} value={game.id}>{game.name}</MenuItem>

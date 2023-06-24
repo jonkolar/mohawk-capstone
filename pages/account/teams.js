@@ -24,7 +24,7 @@ export default function AccountTeams({ user, games }) {
                 <Button onClick={() => setShowCreateTeamModal(!showCreateTeamModal)}>Create Team</Button>
             </div>
 
-            <CreateTeamModal open={showCreateTeamModal} setModal={setShowCreateTeamModal} games={games}/>
+            <CreateTeamModal open={showCreateTeamModal} setModal={setShowCreateTeamModal} user={user} games={games}/>
         </>
     )
 }
