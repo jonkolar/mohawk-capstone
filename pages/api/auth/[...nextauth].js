@@ -21,6 +21,7 @@ export const authOptions = {
   callbacks: {
     async session({ session, user }) {
       session.user.username = user.username
+      session.user.id = user.id
       return session
     }
   }

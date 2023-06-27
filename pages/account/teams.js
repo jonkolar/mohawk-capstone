@@ -10,15 +10,28 @@ import TeamList from "@/components/TeamList";
 
 import Button from '@mui/material/Button';
 
+import { deleteTeamCall } from "@/utils/team-api";
+
 export default function AccountTeams({ user, games }) {
     const [showCreateTeamModal, setShowCreateTeamModal] = useState(false)
+
+    const onDeleteTeamHandler = async (teamId) => {
+        await deleteTeamCall(teamId)
+            .then(response => {
+                if (response) {
+                    location.reload()
+                } else {
+                    console.log('something went wrong')
+                }
+            })
+    }
 
     return (
         <> 
             <TopNavbar/>
             <div className="flex">
                 <h1>MY TEAMS</h1>
-                <TeamList teams={user.teams}/>
+                <TeamList teams={user.teams} onDeleteTeamHandler={onDeleteTeamHandler}/>
             </div>
             <div>
                 <Button onClick={() => setShowCreateTeamModal(!showCreateTeamModal)}>Create Team</Button>

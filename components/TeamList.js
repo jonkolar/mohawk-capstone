@@ -4,13 +4,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
 import GroupsIcon from '@mui/icons-material/Groups';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function TeamList({ teams }) {
-    console.log(teams)
-
+export default function TeamList({ teams, onDeleteTeamHandler }) {
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         { teams.map(team => 
@@ -21,6 +18,9 @@ export default function TeamList({ teams }) {
                 </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={team.name} secondary={team.description} />
+                <div onClick={(e) => onDeleteTeamHandler(team.id)}>
+                    <DeleteIcon/>
+                </div>
             </ListItem>
         )}
     </List>

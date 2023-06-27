@@ -20,3 +20,23 @@ export async function createTeamCall(email, name, gameId, description) {
         return false
     }
 }
+
+export async function deleteTeamCall(teamId) {
+    let payload = {
+        teamId, teamId
+    }
+    
+    try {
+        const response = await fetch(`../api/team/delete`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload)
+        })
+    
+        return await response.json()
+    } catch (error) {
+        return false
+    }
+}
