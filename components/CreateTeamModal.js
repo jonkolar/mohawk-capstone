@@ -28,7 +28,7 @@ const style = {
 
 export default function CreateTeamModal({ user, open, setModal, games }) {
     const [name, setName] = useState('')
-    const [gameId, setGameId] = useState(games[0].id)
+    const [gameId, setGameId] = useState(games.length > 0 ? games[0] : null)
     const [description, setDescription] = useState('')
 
     const handleClose = () => {

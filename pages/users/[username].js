@@ -19,7 +19,6 @@ export default function UsersPage({ user }) {
 
     return (
         <>
-            <TopNavbar session={session}/>
             <Stack
                 direction="column"
                 justifyContent="center"

@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react"
 import "../app/globals.css";
+import TopNavbar from "../components/TopNavbar"
 
 export default function App({
   Component,
@@ -7,6 +8,7 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
+      <TopNavbar />
       <Component {...pageProps} />
     </SessionProvider>
   )

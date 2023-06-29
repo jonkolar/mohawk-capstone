@@ -28,7 +28,6 @@ export default function AccountTeams({ user, games }) {
 
     return (
         <> 
-            <TopNavbar/>
             <div className="flex">
                 <h1>MY TEAMS</h1>
                 <TeamList teams={user.teams} onDeleteTeamHandler={onDeleteTeamHandler}/>
