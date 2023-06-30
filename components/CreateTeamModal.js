@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-import { createTeamCall } from "@/utils/team-api";
+import { createTeamCall } from "@/utils/api/team-api";
 
 const style = {
     position: 'absolute',
@@ -41,6 +41,7 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
         await createTeamCall(user.email, name, gameId, description)
             .then(response => {
                 if (response) {
+                    console.log(response)
                     setModal(false)
                     location.reload()
                 } else {
@@ -51,45 +52,45 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
 
     return (
         <div>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
 
-            <form method="POST" onSubmit={handleSubmit}>
-            <FormControl>
-                <TextField id="team-name" label="Name" variant="outlined" onChange={(e) => setName(e.target.value)} value={name}/>
+                    <form method="POST" onSubmit={handleSubmit}>
+                        <FormControl>
+                            <TextField id="team-name" label="Name" variant="outlined" onChange={(e) => setName(e.target.value)} value={name} />
 
-                <br /><br />
-                
-                <Select
-                    labelId="team-game-label"
-                    id="team-game"
-                    value={gameId}
-                    onChange={(e) => {setGameId(e.target.value)}}
-                >
-                    {games.map((game) => 
-                        <MenuItem key={game.id} value={game.id}>{game.name}</MenuItem>
-                    )}
-                </Select>
+                            <br /><br />
 
-                <br /><br />
+                            <Select
+                                labelId="team-game-label"
+                                id="team-game"
+                                value={gameId}
+                                onChange={(e) => { setGameId(e.target.value) }}
+                            >
+                                {games.map((game) =>
+                                    <MenuItem key={game.id} value={game.id}>{game.name}</MenuItem>
+                                )}
+                            </Select>
 
-                <TextField id="team-description" label="Description" variant="outlined" onChange={(e) => setDescription(e.target.value)} value={description}/>
+                            <br /><br />
 
-                <br /><br />
+                            <TextField id="team-description" label="Description" variant="outlined" onChange={(e) => setDescription(e.target.value)} value={description} />
 
-                <Button type="submit" variant="contained">Submit</Button>
-                <Button onClick={() => setModal(false)}>Close</Button>
+                            <br /><br />
 
-            </FormControl>
-            </form>
+                            <Button type="submit" variant="contained">Submit</Button>
+                            <Button onClick={() => setModal(false)}>Close</Button>
 
-            </Box>
-          </Modal>
+                        </FormControl>
+                    </form>
+
+                </Box>
+            </Modal>
         </div>
     );
 }

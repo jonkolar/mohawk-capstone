@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import Link from './Link';
 
-const TeamListItem = forwardRef(({ team, onDeleteTeamHandler, onClick, href }, ref) => {
+const TeamListItem = forwardRef(({ team, onClick, href }, ref) => {
     return (
         <a href={href} onClick={onClick} ref={ref} style={{textDecoration: 'none', color: 'inherit'}}>
             <ListItem key={team.id}>
@@ -31,7 +31,7 @@ export default function TeamList({ teams, onDeleteTeamHandler }) {
         { teams.map(team => 
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
-                <TeamListItem team={team} onDeleteTeamHandler={onDeleteTeamHandler}/>
+                <TeamListItem team={team} />
             </Link>
             <div onClick={(e) => onDeleteTeamHandler(team.id)}>
                 <DeleteIcon/>

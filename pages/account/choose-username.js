@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react"
 
 import { InputLabel, TextField, Button } from '@mui/material';
 
-import { checkUsernameExistsCall, updateUserCall } from "@/utils/user-api";
+import { checkUsernameExistsCall, updateUserCall } from "@/utils/api/user-api";
 import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 export default function AccountChooseUsername({  }) {
