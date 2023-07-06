@@ -25,19 +25,23 @@ const TeamListItem = forwardRef(({ team, onClick, href }, ref) => {
     )
   })
 
-export default function TeamList({ teams, onDeleteTeamHandler }) {
+export default function TeamList({ teams, user, onDeleteTeamHandler }) {
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        { teams.map(team => 
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
-                <TeamListItem team={team} />
-            </Link>
-            <div onClick={(e) => onDeleteTeamHandler(team.id)}>
-                <DeleteIcon/>
-            </div>
-        </Box>
-        )}
+        { teams.map(team => {
+            const isOwner = team.ownerId == user.id
+            return (
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
+                        <TeamListItem team={team} />
+                    </Link>
+                    { isOwner && <div onClick={(e) => onDeleteTeamHandler(team.id)}>
+                        <DeleteIcon/>
+                    </div>
+                    }
+                </Box>
+            )
+        })}
     </List>
   );
 }

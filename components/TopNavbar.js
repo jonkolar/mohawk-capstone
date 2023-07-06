@@ -139,6 +139,11 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
+                  <Link href={"/account/invites"}>
+                    <Typography textAlign="center">Team Invites</Typography>
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
                 <Link href={"/account/teams"}>
                     <Typography textAlign="center">Teams</Typography>
                   </Link>

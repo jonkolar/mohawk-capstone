@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 
 import { deleteTeamCall } from "@/utils/api/team-api";
 
-export default function AccountTeams({ user, games }) {
+export default function AccountTeams({ user, teams, games }) {
     const [showCreateTeamModal, setShowCreateTeamModal] = useState(false)
 
     const onDeleteTeamHandler = async (teamId) => {
@@ -30,7 +30,7 @@ export default function AccountTeams({ user, games }) {
         <>
             <div className="flex">
                 <h1>MY TEAMS</h1>
-                <TeamList teams={user.teams} onDeleteTeamHandler={onDeleteTeamHandler} />
+                <TeamList teams={teams} user={user} onDeleteTeamHandler={onDeleteTeamHandler} />
             </div>
             <div>
                 <Button onClick={() => setShowCreateTeamModal(!showCreateTeamModal)}>Create Team</Button>
@@ -44,24 +44,33 @@ export default function AccountTeams({ user, games }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
-
     const session = await getServerSession(context.req, context.res, authOptions)
 
-    const user = await db.user.findUnique({
+    const teams = await db.team.findMany({
+       where: {
+        ownerId: session.user.id
+       }
+    })
+
+    const players = await db.player.findMany({
         where: {
-            username: session.user.username
+            userId: session.user.id
         },
         include: {
-            teams: {
-                include: {
-                    game: true
-                }
-            }
+            team: true
+        }
+    })
+
+    players.forEach(player => {
+        if (teams.findIndex(team => {
+            return team.id == player.team.id
+        }) == -1) {
+            teams.push(player.team)
         }
     })
 
     const games = await db.game.findMany()
 
     // Pass data to the page via props
-    return { props: { user: user, games: games } };
+    return { props: { user: session.user, teams: teams, games: games } };
 }

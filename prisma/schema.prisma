@@ -59,6 +59,7 @@ model User {
   aliases       Alias[]
   teams         Team[]
   players       Player[]
+  teamInvites   TeamInvite[]
 }
 
 model Game {
@@ -88,6 +89,7 @@ model Team {
   logo        String?
   description String?
   players     Player[]
+  invites     TeamInvite[]
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
@@ -102,4 +104,14 @@ model Player {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
   alias Alias @relation(fields: [aliasId], references: [id], onDelete: Cascade)
+}
+
+model TeamInvite {
+  id          String @id @default(cuid())
+  userId      String
+  teamId      Int
+  created     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
 }

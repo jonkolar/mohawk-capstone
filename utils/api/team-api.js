@@ -24,3 +24,15 @@ export async function deleteTeamCall(teamId) {
         return false
     }
 }
+
+export async function invitePlayerCall(username, teamId) {
+    try {
+        const response = await apiClient.post("/team/player/invite", {
+            teamId: teamId,
+            username: username
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
