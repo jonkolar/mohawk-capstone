@@ -1,21 +1,34 @@
+import { useState } from "react";
 import { useSession } from "next-auth/react"
 import { db } from "@/utils/db-server";
 
+import { makeStyles } from "@mui/styles";
 import { Avatar, Stack } from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-import TopNavbar from "@/components/TopNavbar"
+import AddAliasModal from "@/components/AddAliasModal";
 import AliasList from "@/components/AliasList";
+
+const useStyles = makeStyles({
+    iconHover: {
+        "&:hover": {
+            cursor: 'pointer'
+        }
+    }
+})
 
 export default function UsersPage({ user }) {
     if (!user) {
         return <h1>User does not exist</h1>
     }
 
+    const [showAddAliasModal, setShowAddAliasModal] = useState(false)
+
+    const classes = useStyles();
+
     const { data: session } = useSession()
 
     const isOwnProfile = session ? session.user.username == user.username : false
-
-    console.log(user.aliases)
 
     return (
         <>
@@ -30,9 +43,12 @@ export default function UsersPage({ user }) {
                     src={user.image}
                     sx={{ width: 100, height: 100 }}
                 />
-
                 <AliasList aliases={user.aliases}/>
+                <div onClick={() => setShowAddAliasModal(true)} className={classes.iconHover}>
+                    <AddCircleIcon/>
+                </div>
             </Stack>
+            <AddAliasModal open={showAddAliasModal} setModal={setShowAddAliasModal}/>
         </>
     )
 }

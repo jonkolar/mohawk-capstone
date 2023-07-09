@@ -34,3 +34,15 @@ export async function userAcceptTeamInviteCall(inviteId, answer) {
         return false
     }
 }
+
+export async function userAddAliasCall(gameId, alias) {
+    try {
+        const response = await apiClient.post("/user/alias/create", {
+            gameId: gameId,
+            alias: alias
+        })
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
