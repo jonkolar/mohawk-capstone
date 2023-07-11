@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react"
 import { db } from "@/utils/db-server";
 import { invitePlayerCall } from "@/utils/api/team-api";
 import InvitePlayerModal from "@/components/InvitePlayerModal";
+import PlayerTable from "@/components/PlayerTable";
 
 import { Button } from "@mui/material";
 
@@ -12,11 +13,9 @@ export default function TeamPage({ team }) {
         return <h1>Team does not exist</h1>
     }
 
-    console.log(team)
+    const { data: session, status } = useSession()
 
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
-
-    const { data: session } = useSession()
 
     const isOwner = session ? session.user.id == team.ownerId : false
 
@@ -32,9 +31,7 @@ export default function TeamPage({ team }) {
             <h1>{team.name} ({team.game.name})</h1>
             <p>{team.description}</p>
             <p>Owner: {team.owner.username}</p>
-            <ul>
-                { team.players.map(player => <li key={player.id}>{player.user.username} | {player.alias.alias}</li> )}
-            </ul>
+            <PlayerTable user={session ? session.user : null} players={team.players}/>
             {isOwner &&
                 <Button onClick={() => setShowInvitePlayerModal(true)}>Invite Player</Button>
             }

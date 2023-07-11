@@ -9,6 +9,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import Link from './Link';
+import HoverIcon from './HoverIcon';
 
 const TeamListItem = forwardRef(({ team, onClick, href }, ref) => {
     return (
@@ -35,10 +36,7 @@ export default function TeamList({ teams, user, onDeleteTeamHandler }) {
                     <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
                         <TeamListItem team={team} />
                     </Link>
-                    { isOwner && <div onClick={(e) => onDeleteTeamHandler(team.id)}>
-                        <DeleteIcon/>
-                    </div>
-                    }
+                    { isOwner && <HoverIcon icon={<DeleteIcon />} onClick={(e) => onDeleteTeamHandler(team.id)} /> }
                 </Box>
             )
         })}

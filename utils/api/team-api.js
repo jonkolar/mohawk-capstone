@@ -36,3 +36,15 @@ export async function invitePlayerCall(username, teamId) {
         return false
     }
 }
+
+export async function updatePlayerAliasCall(playerId, aliasId) {
+    try {
+        const response = await apiClient.post("/team/player/update-alias", {
+            playerId: playerId,
+            aliasId: aliasId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}

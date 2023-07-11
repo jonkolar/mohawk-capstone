@@ -8,6 +8,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import AddAliasModal from "@/components/AddAliasModal";
 import AliasList from "@/components/AliasList";
+import HoverIcon from "@/components/HoverIcon";
 
 const useStyles = makeStyles({
     iconHover: {
@@ -44,9 +45,7 @@ export default function UsersPage({ user }) {
                     sx={{ width: 100, height: 100 }}
                 />
                 <AliasList aliases={user.aliases}/>
-                <div onClick={() => setShowAddAliasModal(true)} className={classes.iconHover}>
-                    <AddCircleIcon/>
-                </div>
+                <HoverIcon icon={<AddCircleIcon />} onClick={() => setShowAddAliasModal(true)}/>
             </Stack>
             <AddAliasModal open={showAddAliasModal} setModal={setShowAddAliasModal}/>
         </>
