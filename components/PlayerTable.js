@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { userRetrieveAllAliasCall } from "@/utils/api/user-api";
-import { updatePlayerAliasCall } from "@/utils/api/team-api";
+import { updatePlayerAliasCall, playerLeaveTeamCall } from "@/utils/api/team-api";
 
 import HoverIcon from "./HoverIcon";
 
@@ -17,9 +17,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import CheckIcon from '@mui/icons-material/Check';
+import UndoIcon from '@mui/icons-material/Undo';
 
-export default function PlayerTable({ user, players }) {
+export default function PlayerTable({ user, players, isOwner }) {
   const [editPlayerAlias, setEditPlayerAlias] = useState(false);
+  const [editPlayerAliasId, setEditPlayerAliasId] = useState(null);
+
+  const onPlayerLeaveHandler = async (playerId) => {
+    await playerLeaveTeamCall(playerId)
+    .then(data => {
+      if (data)
+        location.reload()
+    })
+  }
 
   const PlayerAliasDropdown = ({ player }) => {
     const [aliasId, setAliasId] = useState(player.alias.id);
@@ -27,7 +37,7 @@ export default function PlayerTable({ user, players }) {
 
     useEffect(() => {
       async function retrieveAliases() {
-          await userRetrieveAllAliasCall()
+          await userRetrieveAllAliasCall(player.user.id)
               .then(data => {
                   setAliasList(data.aliases)
               })
@@ -86,13 +96,16 @@ export default function PlayerTable({ user, players }) {
                 {player.user.username}
               </TableCell>
               <TableCell align="right">
-                { editPlayerAlias && (user && user.id == player.user.id) ?
+                { editPlayerAlias && editPlayerAliasId == player.id ?
                   <PlayerAliasDropdown player={player}/>
                   :
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
                       <p>{player.alias.alias}</p>
-                      {user && user.id == player.user.id &&
-                        <HoverIcon icon={<EditIcon />} onClick={() => setEditPlayerAlias(true)}/>
+                      {(user && user.id == player.user.id || isOwner) &&
+                      <>
+                        <HoverIcon icon={<EditIcon />} onClick={() => { setEditPlayerAliasId(player.id); setEditPlayerAlias(true); }} />
+                        <HoverIcon icon={<UndoIcon />} onClick={() => onPlayerLeaveHandler(player.id)} />
+                      </>
                       }
                   </Box>
                 }

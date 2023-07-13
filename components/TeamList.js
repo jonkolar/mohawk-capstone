@@ -6,12 +6,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import GroupsIcon from '@mui/icons-material/Groups';
-import DeleteIcon from '@mui/icons-material/Delete';
+import StarsIcon from '@mui/icons-material/Stars';
 
 import Link from './Link';
-import HoverIcon from './HoverIcon';
 
-const TeamListItem = forwardRef(({ team, onClick, href }, ref) => {
+const TeamListItem = forwardRef(({ user, team, onClick, href }, ref) => {
+    const isOwner = team.ownerId == user.id
     return (
         <a href={href} onClick={onClick} ref={ref} style={{textDecoration: 'none', color: 'inherit'}}>
             <ListItem key={team.id}>
@@ -20,24 +20,25 @@ const TeamListItem = forwardRef(({ team, onClick, href }, ref) => {
                     <GroupsIcon />
                 </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={team.name} secondary={team.description} />
+                <ListItemText primary={team.name} secondary={team.description}/>
+                { isOwner && 
+                    <Box sx={{ mr: 1 }}>
+                        <StarsIcon />
+                    </Box>
+                }
             </ListItem>
         </a>
     )
   })
 
-export default function TeamList({ teams, user, onDeleteTeamHandler }) {
+export default function TeamList({ teams, user }) {
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         { teams.map(team => {
-            const isOwner = team.ownerId == user.id
             return (
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
-                        <TeamListItem team={team} />
-                    </Link>
-                    { isOwner && <HoverIcon icon={<DeleteIcon />} onClick={(e) => onDeleteTeamHandler(team.id)} /> }
-                </Box>
+                <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
+                    <TeamListItem team={team} user={user} />
+                </Link>
             )
         })}
     </List>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react"
 
 import { db } from "@/utils/db-server";
-import { invitePlayerCall } from "@/utils/api/team-api";
+import { invitePlayerCall, deleteTeamCall } from "@/utils/api/team-api";
 import InvitePlayerModal from "@/components/InvitePlayerModal";
 import PlayerTable from "@/components/PlayerTable";
 
@@ -26,14 +26,28 @@ export default function TeamPage({ team }) {
             })
     }
 
+    const onDeleteTeamHandler = async (teamId) => {
+        await deleteTeamCall(teamId)
+            .then(data => {
+                if (data) {
+                    window.location.href = "/account/teams"
+                } else {
+                    console.log('something went wrong')
+                }
+            })
+    }
+
     return (
         <>
             <h1>{team.name} ({team.game.name})</h1>
             <p>{team.description}</p>
             <p>Owner: {team.owner.username}</p>
-            <PlayerTable user={session ? session.user : null} players={team.players}/>
+            <PlayerTable user={session ? session.user : null} players={team.players} isOwner={isOwner}/>
             {isOwner &&
+            <>
                 <Button onClick={() => setShowInvitePlayerModal(true)}>Invite Player</Button>
+                <Button onClick={() => onDeleteTeamHandler(team.id)}>Delete Team</Button>
+            </>
             }
             <InvitePlayerModal open={showInvitePlayerModal} setModal={setShowInvitePlayerModal} invitePlayerHandler={onInvitePlayerHandler}/>
         </>

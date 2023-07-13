@@ -48,3 +48,14 @@ export async function updatePlayerAliasCall(playerId, aliasId) {
         return false
     }
 }
+
+export async function playerLeaveTeamCall(playerId) {
+    try {
+        const response = await apiClient.post("/team/player/leave", {
+            playerId: playerId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
