@@ -59,3 +59,15 @@ export async function playerLeaveTeamCall(playerId) {
         return false
     }
 }
+
+export async function createPostCall(teamId, content) {
+    try {
+        const response = await apiClient.post("/team/post/create", {
+            teamId, teamId,
+            content: content
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}

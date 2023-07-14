@@ -7,8 +7,10 @@ import InvitePlayerModal from "@/components/InvitePlayerModal";
 import PlayerTable from "@/components/PlayerTable";
 
 import { Button } from "@mui/material";
+import PostList from "@/components/PostList";
+import CreatePostModal from "@/components/CreatePostModal";
 
-export default function TeamPage({ team }) {
+export default function TeamPage({ team, posts }) {
     if (!team) {
         return <h1>Team does not exist</h1>
     }
@@ -16,6 +18,7 @@ export default function TeamPage({ team }) {
     const { data: session, status } = useSession()
 
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
+    const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
     const isOwner = session ? session.user.id == team.ownerId : false
 
@@ -49,7 +52,15 @@ export default function TeamPage({ team }) {
                 <Button onClick={() => onDeleteTeamHandler(team.id)}>Delete Team</Button>
             </>
             }
+            <h1>Posts</h1>
+            <PostList posts={posts}/>
+            {isOwner &&
+            <>
+                <Button onClick={() => setShowCreatePostModal(true)}>Create Post</Button>
+            </>
+            }
             <InvitePlayerModal open={showInvitePlayerModal} setModal={setShowInvitePlayerModal} invitePlayerHandler={onInvitePlayerHandler}/>
+            <CreatePostModal open={showCreatePostModal} setModal={setShowCreatePostModal} team={team}/>
         </>
     )
 }
@@ -74,7 +85,18 @@ export async function getServerSideProps({ req, res, query }) {
             owner: true
         },
     })
+
+    const posts = JSON.parse(JSON.stringify(await db.post.findMany({
+        where: {
+            teamId: parseInt(teamId)
+        },
+        orderBy: [
+            {
+                date: 'desc'
+            }
+        ]
+    })))
    
     // Pass data to the page via props
-    return { props: { team: team } };
+    return { props: { team: team, posts: posts } };
 }

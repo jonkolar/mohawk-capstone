@@ -60,6 +60,7 @@ model User {
   teams         Team[]
   players       Player[]
   teamInvites   TeamInvite[]
+  postLikes     PostLike[]
 }
 
 model Game {
@@ -90,6 +91,7 @@ model Team {
   description String?
   players     Player[]
   invites     TeamInvite[]
+  posts       Post[]
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
@@ -114,4 +116,23 @@ model TeamInvite {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id          Int @id @default(autoincrement())
+  teamId      Int
+  content     String
+  date        DateTime @default(now())
+  likes       PostLike[]
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model PostLike {
+  id        String @id @default(cuid())
+  postId    Int
+  userId    String 
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
