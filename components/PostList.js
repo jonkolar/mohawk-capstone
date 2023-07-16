@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 export default function PostList({ posts }) {
 
     const PostListItem = ({ post }) => {
-        const timeSince = moment(post.created).fromNow();
+        const timeSince = moment(post.date).fromNow();
         return (
             <ListItem>
                 <ListItemText
@@ -21,7 +21,7 @@ export default function PostList({ posts }) {
 
     return (
         <List dense={true}>
-            { posts.map(post => <PostListItem post={post}/>)}
+            { posts.map(post => <PostListItem key={post.id} post={post}/>)}
         </List>
     );
 }

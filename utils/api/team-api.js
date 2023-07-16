@@ -71,3 +71,15 @@ export async function createPostCall(teamId, content) {
         return false
     }
 }
+
+export async function retrieveTeamPostListCall(teamId, cursor=null) {
+    try {
+        const response = await apiClient.post("/team/post/list", {
+            teamId, teamId,
+            cursor: cursor
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
