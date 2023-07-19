@@ -83,3 +83,25 @@ export async function retrieveTeamPostListCall(teamId, cursor=null) {
         return false
     }
 }
+
+export async function createPostLikeCall(postId) {
+    try {
+        const response = await apiClient.post("/team/post/like", {
+            postId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
+export async function removePostLikeCall(postId) {
+    try {
+        const response = await apiClient.post("/team/post/dislike", {
+            postId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}

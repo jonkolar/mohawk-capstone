@@ -100,7 +100,7 @@ export default function TeamPage({ team, initialPosts }) {
             {isOwner &&
                 <Button onClick={() => setShowCreatePostModal(true)}>Create Post</Button>
             }
-            <PostList posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
+            <PostList user={session ? session.user : null} posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
             <div>
                 <Button onClick={() => onPrevPostsHandler()} disabled={prevButtonDisabled}>Prev</Button>
                 <Button onClick={() => onNextPostsHandler()} disabled={nextButtonDisabled}>Next</Button>
@@ -135,7 +135,10 @@ export async function getServerSideProps({ req, res, query }) {
     const initialPosts = JSON.parse(JSON.stringify(await db.post.findMany({
         take: 3,
         where: {
-          teamId: parseInt(teamId)
+            teamId: parseInt(teamId)
+        },
+        include: {
+            likes: true
         },
         orderBy: {
             date: 'desc'

@@ -13,6 +13,9 @@ export default async function GetPostListHandler(req, res) {
       where: {
         teamId: teamId
       },
+      include: {
+        likes: true
+      },
       orderBy: {
         date: 'desc'
     }
@@ -26,6 +29,9 @@ export default async function GetPostListHandler(req, res) {
       },
       where: {
         teamId: teamId
+      },
+      include: {
+        likes: true
       },
       orderBy: {
         date: 'desc'
