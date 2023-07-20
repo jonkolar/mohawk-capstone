@@ -105,3 +105,16 @@ export async function removePostLikeCall(postId) {
         return false
     }
 }
+
+export async function createTeamMatchCall(team1Id, team2Id, date) {
+    try {
+        const response = await apiClient.post("/team/match/create", {
+            team1Id,
+            team2Id,
+            date
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}

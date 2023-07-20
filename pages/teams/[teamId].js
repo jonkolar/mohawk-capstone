@@ -6,12 +6,14 @@ import { invitePlayerCall, deleteTeamCall } from "@/utils/api/team-api";
 import { retrieveTeamPostListCall } from "@/utils/api/team-api";
 import InvitePlayerModal from "@/components/InvitePlayerModal";
 import PlayerTable from "@/components/PlayerTable";
+import PostList from "@/components/PostList";
+import MatchList from "@/components/MatchList";
+import CreatePostModal from "@/components/CreatePostModal";
+import CreateMatchModal from "@/components/CreateMatchModal";
 
 import { Button } from "@mui/material";
-import PostList from "@/components/PostList";
-import CreatePostModal from "@/components/CreatePostModal";
 
-export default function TeamPage({ team, initialPosts }) {
+export default function TeamPage({ team, initialPosts, matches }) {
     if (!team) {
         return <h1>Team does not exist</h1>
     }
@@ -20,6 +22,7 @@ export default function TeamPage({ team, initialPosts }) {
 
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
     const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+    const [showCreateMatchModal, setShowCreateMatchModal] = useState(false);
 
     const [posts, setPosts] = useState(initialPosts.posts)
     const [postsOffset, setPostsOffset] = useState(0);
@@ -87,8 +90,9 @@ export default function TeamPage({ team, initialPosts }) {
     return (
         <>
             <h1>{team.name} ({team.game.name})</h1>
-            <p>{team.description}</p>
+            <p>Description: {team.description}</p>
             <p>Owner: {team.owner.username}</p>
+            <h1>Roster:</h1>
             <PlayerTable user={session ? session.user : null} players={team.players} isOwner={isOwner}/>
             {isOwner &&
             <>
@@ -105,8 +109,14 @@ export default function TeamPage({ team, initialPosts }) {
                 <Button onClick={() => onPrevPostsHandler()} disabled={prevButtonDisabled}>Prev</Button>
                 <Button onClick={() => onNextPostsHandler()} disabled={nextButtonDisabled}>Next</Button>
             </div>
+            <h1>Matches:</h1>
+            {isOwner &&
+                <Button onClick={() => setShowCreateMatchModal(true)}>Create Match</Button>
+            }
+            <MatchList matches={matches}/>
             <InvitePlayerModal open={showInvitePlayerModal} setModal={setShowInvitePlayerModal} invitePlayerHandler={onInvitePlayerHandler}/>
             <CreatePostModal open={showCreatePostModal} setModal={setShowCreatePostModal} team={team}/>
+            <CreateMatchModal open={showCreateMatchModal} setModal={setShowCreateMatchModal} team={team}/>
         </>
     )
 }
@@ -116,6 +126,7 @@ export default function TeamPage({ team, initialPosts }) {
 export async function getServerSideProps({ req, res, query }) {
     const teamId = query.teamId
     
+    // Team
     const team = await db.team.findUnique({
         where: {
             id: parseInt(teamId)
@@ -128,10 +139,11 @@ export async function getServerSideProps({ req, res, query }) {
                 }
             },
             game: true,
-            owner: true
+            owner: true,
         },
     })
 
+    // Posts
     const initialPosts = JSON.parse(JSON.stringify(await db.post.findMany({
         take: 3,
         where: {
@@ -144,8 +156,6 @@ export async function getServerSideProps({ req, res, query }) {
             date: 'desc'
         }
     })))
-
-
     const isMore = initialPosts.length > 0 ? await db.post.findFirst({
         where: {
             teamId: parseInt(teamId),
@@ -156,10 +166,31 @@ export async function getServerSideProps({ req, res, query }) {
     })
     :
     false
+
+    // Matches
+    const matches = JSON.parse(JSON.stringify(await db.match.findMany({
+        where: {
+            OR: [
+                { team1Id: parseInt(teamId) },
+                { team2Id: parseInt(teamId) }
+            ],
+        },
+        include: {
+            team1: true,
+            team2: true
+        },
+        orderBy: {
+            date: 'asc'
+        }
+    })))
    
     // Pass data to the page via props
-    return { props: { team: team, initialPosts: {
-        posts: initialPosts,
-        more: isMore ? true : false
-    }} };
+    return { props: { 
+        team: team, 
+        initialPosts: {
+            posts: initialPosts,
+            more: isMore ? true : false
+        },
+        matches: matches
+    }}
 }

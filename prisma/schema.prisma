@@ -92,6 +92,8 @@ model Team {
   players     Player[]
   invites     TeamInvite[]
   posts       Post[]
+  team1Matches Match[] @relation("team1")
+  team2Matches Match[] @relation("team2")
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
@@ -135,4 +137,15 @@ model PostLike {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Match {
+  id          Int @id @default(autoincrement())
+  team1Id     Int 
+  team2Id     Int
+  date        DateTime
+  winner      Int?
+
+  team1 Team @relation(fields: [team1Id], references: [id], onDelete: Cascade, name: "team1")
+  team2 Team @relation(fields: [team2Id], references: [id], onDelete: Cascade, name: "team2")
 }
