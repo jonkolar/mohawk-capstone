@@ -1,35 +1,33 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react"
 import moment from "moment";
+
+
 import { db } from "@/utils/db-server";
-
-import { makeStyles } from "@mui/styles";
-import { Avatar, Box, Stack } from "@mui/material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-
-import AddAliasModal from "@/components/AddAliasModal";
-import AliasList from "@/components/AliasList";
-import HoverIcon from "@/components/HoverIcon";
+import { cancelTeamMatchCall } from "@/utils/api/team-api";
 import Link from "@/components/Link";
 
-const useStyles = makeStyles({
-    iconHover: {
-        "&:hover": {
-            cursor: 'pointer'
-        }
-    }
-})
+import { Box, Button } from "@mui/material";
 
 export default function UsersPage({ match }) {
     if (!match) {
         return <h1>Match does not exist</h1>
     }
 
-    const classes = useStyles();
-
-    console.log(match)
-
     const { data: session } = useSession()
+
+    const isTeamOwner = session ? match.team1.ownerId == session.user.id || match.team2.ownerId == session.user.id : false
+
+    const onCancelMatchClickedHandler = async () => {
+        await cancelTeamMatchCall(match.id)
+            .then(data =>{
+                if (data) {
+                    location.reload();
+                } else {
+                    console.log("An error as occured")
+                }
+            })
+    }
 
     return (
         <Box>
@@ -51,8 +49,9 @@ export default function UsersPage({ match }) {
                     </ul>
                 </div>
             </Box>
-            <Box sx={{display: 'flex', justifyContent: 'center'}}>
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <i>{moment(match.date).format("MMM Do YYYY")}</i>
+                {isTeamOwner && <Button onClick={() => onCancelMatchClickedHandler()}>Cancel</Button>}
             </Box>
         </Box>
     )
@@ -90,7 +89,7 @@ export async function getServerSideProps({ req, res, query }) {
             },
         }
     })
-    match.date = JSON.parse(JSON.stringify(match.date))
+    if (match) match.date = JSON.parse(JSON.stringify(match.date))
    
     // Pass data to the page via props
     return { props: { match: match } };

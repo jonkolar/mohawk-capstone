@@ -118,3 +118,15 @@ export async function createTeamMatchCall(team1Id, team2Id, date) {
         return false
     }
 }
+
+export async function cancelTeamMatchCall(matchId) {
+    try {
+        const response = await apiClient.post("/team/match/cancel", {
+            matchId: matchId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
