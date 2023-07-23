@@ -1,7 +1,7 @@
 import { useState } from "react";
 import moment from "moment";
 
-import { createTeamMatchCall } from "@/utils/api/team-api";
+import { sendTeamMatchChallengeCall } from "@/utils/api/team-api";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -36,7 +36,7 @@ export default function CreateMatchModal({ team, open, setModal }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await createTeamMatchCall(team.id, parseInt(teamId), date)
+        await sendTeamMatchChallengeCall(team.id, parseInt(teamId), date)
             .then(data => {
                 if (data) {
                     console.log(data)
@@ -66,7 +66,7 @@ export default function CreateMatchModal({ team, open, setModal }) {
                                 onChange={(e) => setDate(e.target.value)}
                                 required
                             />
-                            <Button type="submit" variant="contained">Create</Button>
+                            <Button type="submit" variant="contained">Send</Button>
                             <Button onClick={() => setModal(false)}>Close</Button>
                         </FormControl>
                     </form>

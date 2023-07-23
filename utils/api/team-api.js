@@ -106,12 +106,37 @@ export async function removePostLikeCall(postId) {
     }
 }
 
-export async function createTeamMatchCall(team1Id, team2Id, date) {
+export async function sendTeamMatchChallengeCall(senderTeamId, receiverTeamId, date) {
     try {
-        const response = await apiClient.post("/team/match/create", {
+        const response = await apiClient.post("/team/match/send", {
+            senderTeamId,
+            receiverTeamId,
+            date
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
+export async function acceptTeamMatchChallengeCall(matchChallengeId, team1Id, team2Id, date) {
+    try {
+        const response = await apiClient.post("/team/match/accept", {
+            matchChallengeId,
             team1Id,
             team2Id,
             date
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
+export async function ignoreTeamMatchChallengeCall(matchChallengeId) {
+    try {
+        const response = await apiClient.post("/team/match/ignore", {
+            matchChallengeId
         });
         return response.data
     } catch (error) {

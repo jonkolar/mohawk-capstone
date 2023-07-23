@@ -9,11 +9,12 @@ import PlayerTable from "@/components/PlayerTable";
 import PostList from "@/components/PostList";
 import MatchList from "@/components/MatchList";
 import CreatePostModal from "@/components/CreatePostModal";
-import CreateMatchModal from "@/components/CreateMatchModal";
+import SendMatchChallengeModal from "@/components/SendMatchChallengeModal";
 
 import { Button } from "@mui/material";
+import ReceivedMatchChallengesModal from "@/components/ReceivedMatchChallengesModal";
 
-export default function TeamPage({ team, initialPosts, matches }) {
+export default function TeamPage({ team, initialPosts, matches, challenges }) {
     if (!team) {
         return <h1>Team does not exist</h1>
     }
@@ -22,7 +23,8 @@ export default function TeamPage({ team, initialPosts, matches }) {
 
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
     const [showCreatePostModal, setShowCreatePostModal] = useState(false);
-    const [showCreateMatchModal, setShowCreateMatchModal] = useState(false);
+    const [showSendMatchChallengeModal, setShowSendMatchChallengeModal] = useState(false);
+    const [showReceivedChallengesModal, setShowReceivedChallengesModal] = useState(false)
 
     const [posts, setPosts] = useState(initialPosts.posts)
     const [postsOffset, setPostsOffset] = useState(0);
@@ -111,12 +113,16 @@ export default function TeamPage({ team, initialPosts, matches }) {
             </div>
             <h1>Matches:</h1>
             {isOwner &&
-                <Button onClick={() => setShowCreateMatchModal(true)}>Create Match</Button>
+            <>
+                <Button onClick={() => setShowSendMatchChallengeModal(true)}>Send Challenge</Button>
+                <Button onClick={() => setShowReceivedChallengesModal(true)}>View Challenges</Button>
+            </>
             }
             <MatchList matches={matches}/>
             <InvitePlayerModal open={showInvitePlayerModal} setModal={setShowInvitePlayerModal} invitePlayerHandler={onInvitePlayerHandler}/>
             <CreatePostModal open={showCreatePostModal} setModal={setShowCreatePostModal} team={team}/>
-            <CreateMatchModal open={showCreateMatchModal} setModal={setShowCreateMatchModal} team={team}/>
+            <SendMatchChallengeModal open={showSendMatchChallengeModal} setModal={setShowSendMatchChallengeModal} team={team}/>
+            <ReceivedMatchChallengesModal open={showReceivedChallengesModal} setModal={setShowReceivedChallengesModal} challenges={challenges}/>
         </>
     )
 }
@@ -183,6 +189,19 @@ export async function getServerSideProps({ req, res, query }) {
             date: 'asc'
         }
     })))
+
+    const challenges = JSON.parse(JSON.stringify(await db.matchChallenge.findMany({
+        where: {
+            receiverTeamId: parseInt(teamId)
+        },
+        include: {
+            teamSender: true,
+            teamReceiver: true
+        },
+        orderBy: {
+            date: 'asc'
+        }
+    })))
    
     // Pass data to the page via props
     return { props: { 
@@ -191,6 +210,7 @@ export async function getServerSideProps({ req, res, query }) {
             posts: initialPosts,
             more: isMore ? true : false
         },
-        matches: matches
+        matches: matches,
+        challenges: challenges
     }}
 }

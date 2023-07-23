@@ -18,6 +18,7 @@ import { userAcceptTeamInviteCall } from "@/utils/api/user-api";
 const AccountInvites = ({ session, invites }) => {
     const onRefreshInvites = async () => {
         // Get Updated Invites
+        location.reload() // Placeholder
     }
 
     const onAnswerInvite = async (invite, answer) => {

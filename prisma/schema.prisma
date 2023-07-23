@@ -92,6 +92,8 @@ model Team {
   players     Player[]
   invites     TeamInvite[]
   posts       Post[]
+  sentMatchChallenges      MatchChallenge[] @relation("senderTeam")
+  receivedMatchChallenges  MatchChallenge[] @relation("receiverTeam")
   team1Matches Match[] @relation("team1")
   team2Matches Match[] @relation("team2")
 
@@ -148,4 +150,15 @@ model Match {
 
   team1 Team @relation(fields: [team1Id], references: [id], onDelete: Cascade, name: "team1")
   team2 Team @relation(fields: [team2Id], references: [id], onDelete: Cascade, name: "team2")
+}
+
+model MatchChallenge {
+  id                String @id @default(cuid())
+  senderTeamId      Int
+  receiverTeamId    Int
+  date              DateTime
+  created           DateTime @default(now())
+
+  teamSender Team @relation(fields: [senderTeamId], references: [id], onDelete: Cascade, name: "senderTeam")
+  teamReceiver Team @relation(fields: [receiverTeamId], references: [id], onDelete: Cascade, name: "receiverTeam")
 }
