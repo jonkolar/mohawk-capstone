@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import SearchIcon from '@mui/icons-material/Search';
 
 function ResponsiveAppBar() {
   const { data: session } = useSession()
@@ -92,8 +93,10 @@ function ResponsiveAppBar() {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'end', marginRight: 1 }}>
+              <Link href={"/search"}>
+                <SearchIcon />
+              </Link>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -144,7 +147,7 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
-                <Link href={"/account/teams"}>
+                  <Link href={"/account/teams"}>
                     <Typography textAlign="center">Teams</Typography>
                   </Link>
                 </MenuItem>
