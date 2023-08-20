@@ -5,6 +5,7 @@ export default async function SendUserTeamInviteHandler(req, res) {
 
   let inviteId = req.body.inviteId
   let answer = req.body.answer
+  let aliasId = req.body.aliasId
 
   const invite = await db.teamInvite.findUnique({
     where: {
@@ -17,7 +18,7 @@ export default async function SendUserTeamInviteHandler(req, res) {
         data: {
             teamId: invite.teamId,
             userId: invite.userId,
-            aliasId: '1', // CHANGE ME
+            aliasId: aliasId
         }
     })
   }

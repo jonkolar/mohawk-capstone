@@ -23,11 +23,12 @@ export async function updateUserCall(email, updateData) {
     }
 }
 
-export async function userAcceptTeamInviteCall(inviteId, answer) {
+export async function userAcceptTeamInviteCall(inviteId, answer, aliasId="") {
     try {
         const response = await apiClient.post("/user/invite-answer", {
             inviteId: inviteId,
-            answer: answer
+            answer: answer,
+            aliasId: aliasId
         })
         return response.data
     } catch (error) {

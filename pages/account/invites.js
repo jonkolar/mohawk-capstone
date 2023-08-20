@@ -14,18 +14,27 @@ import WorkIcon from '@mui/icons-material/Work';
 
 import { db } from "@/utils/db-server"
 import { userAcceptTeamInviteCall } from "@/utils/api/user-api";
+import ChooseAliasModal from "@/components/ChooseAliasModal";
 
-const AccountInvites = ({ session, invites }) => {
+const AccountInvites = ({ user, invites }) => {
+    const [showChooseAliasModal, setShowChooseAliasModal] = useState(false)
+    const [currentInvite, setCurrentInvite] = useState(null);
+
     const onRefreshInvites = async () => {
         // Get Updated Invites
         location.reload() // Placeholder
     }
 
     const onAnswerInvite = async (invite, answer) => {
-        const response = await userAcceptTeamInviteCall(invite.id, answer)
+        if (answer) {
+            setCurrentInvite(invite)
+            setShowChooseAliasModal(true)
+        } else {
+            const response = await userAcceptTeamInviteCall(invite.id, answer)
             .then(response => {
                 location.reload();
             })
+        }
     }
 
     return (
@@ -53,6 +62,7 @@ const AccountInvites = ({ session, invites }) => {
                 })}
             </List>
             <Button onClick={() => onRefreshInvites()}>Refresh</Button>
+            <ChooseAliasModal open={showChooseAliasModal} setModal={setShowChooseAliasModal} user={user} invite={currentInvite}/>
         </>
     )
 }
@@ -74,5 +84,5 @@ export async function getServerSideProps(context) {
     })
 
     // Pass data to the page via props
-    return { props: { session: session, invites: JSON.parse(JSON.stringify(invites)) } };
+    return { props: { user: session.user, invites: JSON.parse(JSON.stringify(invites)) } };
 }
