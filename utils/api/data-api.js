@@ -8,3 +8,12 @@ export async function retrieveGamesCall(teamId) {
         return false
     }
 }
+
+export async function retrieveUserCountCall() {
+    try {
+        const response = await apiClient.get("/data/user-count");
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
