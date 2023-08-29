@@ -133,7 +133,7 @@ export async function getServerSideProps({ req, res, query }) {
     const teamId = query.teamId
     
     // Team
-    const team = await db.team.findUnique({
+    const team = JSON.parse(JSON.stringify(await db.team.findUnique({
         where: {
             id: parseInt(teamId)
         },
@@ -147,7 +147,7 @@ export async function getServerSideProps({ req, res, query }) {
             game: true,
             owner: true,
         },
-    })
+    })))
 
     // Posts
     const initialPosts = JSON.parse(JSON.stringify(await db.post.findMany({
