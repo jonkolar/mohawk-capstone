@@ -19,7 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import SearchIcon from '@mui/icons-material/Search';
 
-function ResponsiveAppBar() {
+function TopNavbar() {
   const { data: session } = useSession()
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -152,12 +152,12 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={() => signOut()}>
-                    <Typography textAlign="center">Sign Out</Typography>
+                    <Typography textAlign="center" >Sign Out</Typography>
                 </MenuItem>
               </Menu>
             </>
             :
-            <Button variant="contained" onClick={() => signIn('discord')}>Sign In</Button>
+            <Button variant="contained" data-testid="sign-in-button" onClick={() => signIn('discord')}>Sign In</Button>
           }
           </Box>
         </Toolbar>
@@ -165,4 +165,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default TopNavbar;
