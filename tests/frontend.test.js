@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import TopNavbar from "@/components/TopNavbar";
-import { SessionProvider } from "next-auth/react";
+
 
 jest.mock("next-auth/react", () => {
     const originalModule = jest.requireActual('next-auth/react');
@@ -21,11 +21,11 @@ jest.mock("next-auth/react", () => {
 
 describe("Navbar Component", () => {
 
-    it('Show Log Out when has session',
-      async () => {
-        const { container } = render(<TopNavbar/>);
+  test('Show Log Out when has session',
+    async () => {
+      const { container } = render(<TopNavbar/>);
+
+      expect(screen.getByText("Sign Out")).toBeInTheDocument();
+    })
   
-        expect(screen.getByText("Sign Out")).toBeInTheDocument();
-      })
-  
-  })
+})
