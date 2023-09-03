@@ -1,7 +1,6 @@
 import { db } from "@/utils/db-server"
-
-import { getUserServerSession } from "@/utils/db/user-service"
-import { createTeam } from "@/utils/db/team-service"
+import { getUserServerSession } from "@/utils/services/user-service"
+import { createTeam } from "@/utils/services/team-service"
 
 export default async function CreateTeamHandler(req, res) {
   // only allow POST requests
@@ -9,6 +8,9 @@ export default async function CreateTeamHandler(req, res) {
 
   // get current session user
   const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
 
   // retrieve payload parameters
   let email = req.body.email
@@ -19,5 +21,8 @@ export default async function CreateTeamHandler(req, res) {
   // create team
   const newTeam = createTeam(db, sessionUser.id, name, gameId, description)
 
-  return res.status(200).json(newTeam)
+  // return success if new team created
+  if (newTeam) {
+    return res.status(200).json(newTeam)
+  }
 }

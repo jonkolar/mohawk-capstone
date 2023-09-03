@@ -89,7 +89,7 @@ export async function getServerSideProps({ req, res, query }) {
             },
         }
     })
-    if (match) match.date = JSON.parse(JSON.stringify(match.date))
+    if (match) match = JSON.parse(JSON.stringify(match))
    
     // Pass data to the page via props
     return { props: { match: match } };
