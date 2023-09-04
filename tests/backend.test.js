@@ -7,7 +7,9 @@ import {
     deleteTeamMatch,
     deleteTeamMatchChallenge, 
     createTeamMatchChallenge,
-    createTeamPlayerInvite
+    createTeamPlayerInvite,
+    deleteTeamPlayer,
+    updatePlayerAlias,
 } from "@/utils/services/team-service";
 
 let mockCtx
@@ -57,6 +59,44 @@ test('delete a team', async () => {
     })
 })
 
+
+// PLAYER
+test('delete a team player', async () => {
+    // prepare
+    const player = {
+        id: 1,
+        userId: 1,
+        teamId: 1,
+    }
+
+    // mock
+    mockCtx.prisma.player.delete.mockResolvedValue(player)
+
+    // compare
+    await expect(deleteTeamPlayer(ctx.prisma, player.id)).resolves.toEqual({
+        id: player.id,
+        userId: player.userId,
+        teamId: player.teamId,
+    })
+})
+
+test('update team player alias', async () => {
+    // prepare
+    const player = {
+        id: 1,
+        aliasId: 1,
+    }
+
+    // mock
+    mockCtx.prisma.player.update.mockResolvedValue(player)
+
+    // compare
+    await expect(updatePlayerAlias(ctx.prisma, player.playerId, player.aliasId)).resolves.toEqual({
+        id: player.id,
+        aliasId: player.aliasId
+    })
+})
+
 test('create a team player invite', async () => {
     // prepare
     const invite = {
@@ -76,6 +116,8 @@ test('create a team player invite', async () => {
     })
 })
 
+
+// MATCH
 test('create a team match', async () => {
     // prepare
     const match = {

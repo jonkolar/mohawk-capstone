@@ -1,28 +1,26 @@
-import { getServerSession } from "next-auth/next"
-
 import { db } from "@/utils/db-server"
-import { authOptions } from "../../auth/[...nextauth]"
+import { getUserServerSession } from "@/utils/services/user-service";
+import { updatePlayerAlias } from "@/utils/services/team-service";
 
 export default async function InvitePlayerHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) {
-    res.status(401).json({ message: "You must be logged in." });
-    return;
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
   }
 
+  // retrieve payload parameters
   let playerId = req.body.playerId
   let aliasId = req.body.aliasId
 
-  const updateAlias = await db.player.update({
-    where: {
-      id: playerId,
-    },
-    data: {
-      aliasId: aliasId,
-    },
-  })
+  // update alias
+  const updatedAlias = await updatePlayerAlias(db, playerId, aliasId);
 
-  return res.status(200).json({result: 'success'})
+  // if alias updated return success
+  if (updatedAlias) {
+    return res.status(200).json({result: 'success'})
+  }
 }

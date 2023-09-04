@@ -1,28 +1,25 @@
-import { getServerSession } from "next-auth/next"
-
 import { db } from "@/utils/db-server"
-import { authOptions } from "../../auth/[...nextauth]"
+import { getUserServerSession } from "@/utils/services/user-service";
+import { deleteTeamPlayer } from "@/utils/services/team-service";
 
 export default async function PlayerLeaveHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  console.log("GOT HERE")
-
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) {
-    res.status(401).json({ message: "You must be logged in." });
-    return;
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
   }
 
+  // retrieve payload parameters
   let playerId = req.body.playerId
 
-  const deletePlayer = await db.player.delete({
-    where: {
-        id: playerId
-    }
-  })
+  // delete player
+  const deletedPlayer = await deleteTeamPlayer(db, playerId);
 
-  console.log(deletePlayer)
-
-  return res.status(200).json({result: 'success'})
+  // if player deleted return success
+  if (deletedPlayer) {
+    return res.status(200).json({result: 'success'})
+  }
 }
