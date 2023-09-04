@@ -1,37 +1,30 @@
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "../../auth/[...nextauth]"
-
 import { db } from "@/utils/db-server"
+import { getUserServerSession } from "@/utils/services/user-service";
+import { getTeamMatch, deleteTeamMatch } from "@/utils/services/team-service";
 
 export default async function CancelMatchHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) {
-    res.status(401).json({ message: "You must be logged in." });
-    return;
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
   }
 
+  // retrieve payload parameters
   let matchId = req.body.matchId
 
-  const match = await db.match.findUnique({
-    where: {
-        id: matchId
-    },
-    include: {
-        team1: true,
-        team2: true
-    }
-  })
-
-  if (match.team1.ownerId != session.user.id && match.team2.ownerId != session.user.id)
+  // ensure match can only be deleted by one of the teams owners
+  const match = await getTeamMatch(db, matchId);
+  if (match.team1.ownerId != sessionUser.id && match.team2.ownerId != sessionUser.id)
     return res.status(404).json({Error: "You have to be a team owner to cancel a match"})
 
-  const newMatch = await db.match.delete({
-    where: {
-        id: matchId
-    }
-  })
+  // delete match
+  const deletedMatch = await deleteTeamMatch(db, matchId);
 
-  return res.status(200).json({result: "success"})
+  // if match deleted then return success
+  if (deletedMatch) {
+    return res.status(200).json({result: "success"})
+  }
 }

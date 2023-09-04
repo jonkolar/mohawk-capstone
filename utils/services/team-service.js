@@ -34,6 +34,31 @@ export async function deleteTeam(db, teamId) {
 
 
 // MATCH
+export async function getTeamMatch(db, matchId) {
+    const match = await db.match.findUnique({
+        where: {
+            id: matchId
+        },
+        include: {
+            team1: true,
+            team2: true
+        }
+      })
+
+    return match;
+}
+
+export async function createTeamPlayerInvite(db, userId, teamId){
+    const newInvite = await db.teamInvite.create({
+        data: {
+          userId: userId,
+          teamId: teamId
+        }
+    })
+
+    return newInvite;
+}
+
 export async function createTeamMatch(db, team1Id, team2Id, date) {
     const newMatch = await db.match.create({
         data: {
@@ -44,6 +69,28 @@ export async function createTeamMatch(db, team1Id, team2Id, date) {
     })
 
     return newMatch;
+}
+
+export async function deleteTeamMatch(db, matchId) {
+    const deletedMatch = await db.match.delete({
+        where: {
+            id: matchId
+        }
+    })
+
+    return deletedMatch;
+}
+
+export async function createTeamMatchChallenge(db, senderTeamId, receiverTeamId, date) {
+    const newMatchChallenge = await db.matchChallenge.create({
+        data: {
+            senderTeamId: senderTeamId,
+            receiverTeamId: receiverTeamId,
+            date: date
+        }
+      })
+
+    return newMatchChallenge;
 }
 
 export async function deleteTeamMatchChallenge(db, matchChallengeId) {

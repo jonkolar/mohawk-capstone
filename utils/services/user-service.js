@@ -6,12 +6,10 @@ export async function getUserServerSession(req, res) {
     return session.user;
 }
 
-export async function getUser(db, email) {
+export async function getUser(db, criteria) {
     const user = await db.user.findUnique({
-        where: {
-            email: email
-        }
+        where: criteria
     })
-    
+
     return user;
 }

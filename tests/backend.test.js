@@ -1,6 +1,14 @@
 import { createMockContext } from "./test-db-context";
 
-import { createTeam, deleteTeam, createTeamMatch, deleteTeamMatchChallenge } from "@/utils/services/team-service";
+import { 
+    createTeam, 
+    deleteTeam, 
+    createTeamMatch,
+    deleteTeamMatch,
+    deleteTeamMatchChallenge, 
+    createTeamMatchChallenge,
+    createTeamPlayerInvite
+} from "@/utils/services/team-service";
 
 let mockCtx
 let ctx
@@ -49,6 +57,25 @@ test('delete a team', async () => {
     })
 })
 
+test('create a team player invite', async () => {
+    // prepare
+    const invite = {
+        userId: 1,
+        teamId: 1,
+        date: Date.now()
+    }
+
+    // mock
+    mockCtx.prisma.teamInvite.create.mockResolvedValue(invite)
+
+    // compare
+    await expect(createTeamPlayerInvite(ctx.prisma, 1, invite.userId, invite.teamId)).resolves.toEqual({
+        userId: invite.userId,
+        teamId: invite.teamId,
+        date: invite.date
+    })
+})
+
 test('create a team match', async () => {
     // prepare
     const match = {
@@ -65,6 +92,46 @@ test('create a team match', async () => {
         team1Id: 1,
         team2Id: 2,
         date: match.date
+    })
+})
+
+test('cancel a team match', async () => {
+    // prepare
+    const match = {
+        id: 1,
+        team1Id: 1,
+        team2Id: 2,
+        date: Date.now()
+    }
+
+    // mock
+    mockCtx.prisma.match.delete.mockResolvedValue(match)
+
+    // compare
+    await expect(deleteTeamMatch(ctx.prisma, match.id)).resolves.toEqual({
+        id: 1,
+        team1Id: 1,
+        team2Id: 2,
+        date: match.date
+    })
+})
+
+test('create a team match challenge', async () => {
+    // prepare
+    const matchChallenge = {
+        senderTeamId: 1,
+        receiverTeamId: 2,
+        date: Date.now()
+    }
+
+    // mock
+    mockCtx.prisma.matchChallenge.create.mockResolvedValue(matchChallenge)
+
+    // compare
+    await expect(createTeamMatchChallenge(ctx.prisma, matchChallenge.senderTeamId, matchChallenge.receiverTeamId)).resolves.toEqual({
+        senderTeamId: matchChallenge.senderTeamId,
+        receiverTeamId: matchChallenge.receiverTeamId,
+        date: matchChallenge.date
     })
 })
 
