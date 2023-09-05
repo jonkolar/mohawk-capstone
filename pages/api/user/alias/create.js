@@ -1,26 +1,27 @@
-import { getServerSession } from "next-auth/next"
-
-
-import { authOptions } from "../../auth/[...nextauth]"
 import { db } from "@/utils/db-server"
+import { getUserServerSession, createUserAlias } from "@/utils/services/user-service";
 
 // api/user/alias/create
 export default async (req, res) => {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  const session = await getServerSession(req, res, authOptions);
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
 
-  const userId = session.user.id
+  // retrieve payload parameters
+  const userId = sessionUser.id
   const alias = req.body.alias
   const gameId = req.body.gameId
 
-  const newAlias = await db.alias.create({
-    data: {
-        userId: userId,
-        alias: alias,
-        gameId: gameId
-    }
-  })
+  // create alias
+  const newAlias = await createUserAlias(db, userId, alias, gameId);
 
-  return res.status(200).json({success: true})
+  // return success if alias created
+  if (newAlias) {
+    return res.status(200).json({success: true})
+  }
 }

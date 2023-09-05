@@ -1,5 +1,5 @@
 import { db } from "@/utils/db-server"
-import { getUserServerSession } from "@/utils/services/user-service";
+import { getUserServerSession } from "@/utils/userServerSession";
 import { getTeamPostsPagination } from "@/utils/services/team-service";
 
 export default async function GetPostListHandler(req, res) {

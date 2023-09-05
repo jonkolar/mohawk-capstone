@@ -61,7 +61,29 @@ export async function createTeamPlayerInvite(db, userId, teamId){
     return newInvite;
 }
 
+export async function deleteTeamPlayerInvite(db, inviteId){
+    const deletedTeamInvite = await db.teamInvite.delete({
+        where: {
+            id: inviteId
+        }
+    })
+
+    return deletedTeamInvite;
+}
+
 // PLAYER
+export async function createTeamPlayer(db, teamId, userId, aliasId) {
+    const createdPlayer = await db.player.create({
+        data: {
+            teamId: teamId,
+            userId: userId,
+            aliasId: aliasId
+        }
+    })
+
+    return createdPlayer;
+}
+
 export async function deleteTeamPlayer(db, playerId) {
     const deletedPlayer = await db.player.delete({
         where: {

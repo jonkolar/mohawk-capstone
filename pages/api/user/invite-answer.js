@@ -1,33 +1,39 @@
 import { db } from "@/utils/db-server"
+import { getUserServerSession } from "@/utils/userServerSession";
+import { createTeamPlayer, deleteTeamPlayerInvite } from "@/utils/services/team-service";
 
 export default async function SendUserTeamInviteHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
+
+  // retrieve payload parameters
   let inviteId = req.body.inviteId
   let answer = req.body.answer
   let aliasId = req.body.aliasId
 
+  // find invite for details
   const invite = await db.teamInvite.findUnique({
     where: {
         id: inviteId
     }
   })
 
+  // create player if invite was accepted
   if (answer) {
-    const createPlayer = await db.player.create({
-        data: {
-            teamId: invite.teamId,
-            userId: invite.userId,
-            aliasId: aliasId
-        }
-    })
+    const createdPlayer = await createTeamPlayer(db, invite.teamId, invite.userId, aliasId)
   }
 
-  const deletedTeamInvite = await db.teamInvite.delete({
-    where: {
-        id: inviteId
-    }
-  })
+  // delete the team invite since it was answered
+  const deletedTeamInvite = await deleteTeamPlayerInvite(db, invite.id)
 
-  return res.status(200).json({ success: true })
+  // return success if delete team invite
+  if (deletedTeamInvite) {
+    return res.status(200).json({ success: true })
+  }
 }

@@ -71,5 +71,5 @@ export async function getServerSideProps({ req, res, query }) {
     })
    
     // Pass data to the page via props
-    return { props: { user: user } };
+    return { props: { user: JSON.parse(JSON.stringify(user)) } };
 }

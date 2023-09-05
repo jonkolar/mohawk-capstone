@@ -1,5 +1,7 @@
 import { createMockContext } from "./test-db-context";
 
+import { createUserAlias } from "@/utils/services/user-service";
+
 import { 
     createTeam, 
     deleteTeam, 
@@ -8,11 +10,13 @@ import {
     deleteTeamMatchChallenge, 
     createTeamMatchChallenge,
     createTeamPlayerInvite,
+    deleteTeamPlayerInvite,
     deleteTeamPlayer,
     updatePlayerAlias,
     createTeamPost,
     deleteTeamPostLike,
-    createTeamPostLike
+    createTeamPostLike,
+    createTeamPlayer
 } from "@/utils/services/team-service";
 
 let mockCtx
@@ -22,6 +26,27 @@ beforeEach(() => {
     mockCtx = createMockContext()
     ctx = mockCtx
 })
+
+// USER
+test('create an alias', async () => {
+    // prepare
+    const alias = {
+        userId: 1,
+        alias: "test",
+        gameId: 1
+    }
+
+    // mock
+    mockCtx.prisma.alias.create.mockResolvedValue(alias)
+
+    // compare
+    await expect(createUserAlias(ctx.prisma, alias.userId, alias.alias, alias.gameId)).resolves.toEqual({
+        userId: alias.userId,
+        alias: alias.alias,
+        gameId: alias.gameId
+    })
+})
+
 
 // TEAM
 test('create a team', async () => {
@@ -64,6 +89,25 @@ test('delete a team', async () => {
 
 
 // PLAYER
+test('create a team player', async () => {
+    // prepare
+    const player = {
+        userId: 1,
+        teamId: 1,
+        aliasId: 1,
+    }
+
+    // mock
+    mockCtx.prisma.player.create.mockResolvedValue(player)
+
+    // compare
+    await expect(createTeamPlayer(ctx.prisma, player.teamId, player.userId, player.aliasId)).resolves.toEqual({
+        aliasId: player.aliasId,
+        userId: player.userId,
+        teamId: player.teamId,
+    })
+})
+
 test('delete a team player', async () => {
     // prepare
     const player = {
@@ -113,6 +157,27 @@ test('create a team player invite', async () => {
 
     // compare
     await expect(createTeamPlayerInvite(ctx.prisma, 1, invite.userId, invite.teamId)).resolves.toEqual({
+        userId: invite.userId,
+        teamId: invite.teamId,
+        date: invite.date
+    })
+})
+
+test('delete a team player invite', async () => {
+    // prepare
+    const invite = {
+        id: 1,
+        userId: 1,
+        teamId: 1,
+        date: Date.now()
+    }
+
+    // mock
+    mockCtx.prisma.teamInvite.delete.mockResolvedValue(invite)
+
+    // compare
+    await expect(deleteTeamPlayerInvite(ctx.prisma, invite.id)).resolves.toEqual({
+        id: invite.id,
         userId: invite.userId,
         teamId: invite.teamId,
         date: invite.date
