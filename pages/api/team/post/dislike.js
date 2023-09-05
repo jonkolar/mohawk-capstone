@@ -1,20 +1,25 @@
 import { db } from "@/utils/db-server"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "../../auth/[...nextauth]";
+import { getUserServerSession } from "@/utils/services/user-service";
+import { deleteTeamPostLike } from "@/utils/services/team-service";
 
 export default async function PostDislikeHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  const session = await getServerSession(req, res, authOptions)
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
 
+  // retrieve payload parameters
   let postId = req.body.postId
 
-  const deletedPostLike = await db.postLike.deleteMany({
-    where: {
-        postId: postId,
-        userId: session.user.id
-    }
-  })
+  // delete post like
+  const deletedPostLike = await deleteTeamPostLike(db, postId, sessionUser.id)
 
-  return res.status(200).json({success: true})
+  // if post like deleted consider success
+  if (deletedPostLike) {
+    return res.status(200).json({success: true})
+  }
 }

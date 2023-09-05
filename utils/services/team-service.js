@@ -131,3 +131,75 @@ export async function deleteTeamMatchChallenge(db, matchChallengeId) {
 
     return deletedChallenge;
 }
+
+// POST
+export async function createTeamPost(db, teamId, content) {
+    const newPost = await db.post.create({
+        data: {
+            teamId: teamId,
+            content: content
+        }
+      })
+
+    return newPost;
+}
+
+export async function createTeamPostLike(db, postId, userId) {
+    const newPostLike = await db.postLike.create({
+        data: {
+            userId: userId,
+            postId: postId
+        }
+    })
+
+    return newPostLike
+}
+
+export async function deleteTeamPostLike(db, postId, userId) {
+    const deletedPostLike = await db.postLike.deleteMany({
+        where: {
+            postId: postId,
+            userId: userId
+        }
+    })
+
+    return deletedPostLike;
+}
+
+export async function getTeamPostsPagination(db, teamId, cursor=null) {
+  let results;
+  if (!cursor) {
+    results = await db.post.findMany({
+      take: 3,
+      where: {
+        teamId: teamId
+      },
+      include: {
+        likes: true
+      },
+      orderBy: {
+        date: 'desc'
+    }
+    })
+  } else {
+    results = await db.post.findMany({
+      take: 3,
+      skip: 1, // Skip the cursor
+      cursor: {
+        id: cursor,
+      },
+      where: {
+        teamId: teamId
+      },
+      include: {
+        likes: true
+      },
+      orderBy: {
+        date: 'desc'
+    }
+    })
+  }
+
+  return results;
+}
+

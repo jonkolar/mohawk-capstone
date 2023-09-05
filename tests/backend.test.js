@@ -10,6 +10,9 @@ import {
     createTeamPlayerInvite,
     deleteTeamPlayer,
     updatePlayerAlias,
+    createTeamPost,
+    deleteTeamPostLike,
+    createTeamPostLike
 } from "@/utils/services/team-service";
 
 let mockCtx
@@ -191,3 +194,56 @@ test('delete a team match challenge', async () => {
         id: 1
     })
 })
+
+// POST
+test('create a post', async () => {
+    // prepare
+    const post = {
+        teamId: 1,
+        content: "test content"
+    }
+
+    // mock
+    mockCtx.prisma.post.create.mockResolvedValue(post)
+
+    // compare
+    await expect(createTeamPost(ctx.prisma, post.teamId, post.content)).resolves.toEqual({
+        teamId: 1,
+        content: "test content"
+    })
+})
+
+test('create a post like', async () => {
+    // prepare
+    const postLike = {
+        userId: 1,
+        postId: 1
+    }
+
+    // mock
+    mockCtx.prisma.postLike.create.mockResolvedValue(postLike)
+
+    // compare
+    await expect(createTeamPostLike(ctx.prisma, postLike.postId, postLike.userId)).resolves.toEqual({
+        userId: postLike.userId,
+        postId: postLike.postId
+    })
+})
+
+test('delete a post like', async () => {
+    // prepare
+    const postLike = {
+        userId: 1,
+        postId: 1
+    }
+
+    // mock
+    mockCtx.prisma.postLike.deleteMany.mockResolvedValue(postLike)
+
+    // compare
+    await expect(deleteTeamPostLike(ctx.prisma, postLike.postId, postLike.userId)).resolves.toEqual({
+        userId: postLike.userId,
+        postId: postLike.postId
+    })
+})
+

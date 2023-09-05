@@ -1,20 +1,25 @@
 import { db } from "@/utils/db-server"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "../../auth/[...nextauth]";
+import { getUserServerSession } from "@/utils/services/user-service";
+import { createTeamPostLike } from "@/utils/services/team-service";
 
 export default async function PostCreateLikeHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  const session = await getServerSession(req, res, authOptions)
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
 
+  // retrieve payload parameters
   let postId = req.body.postId
 
-  const newPostLike = await db.postLike.create({
-    data: {
-        userId: session.user.id,
-        postId: postId
-    }
-  })
+  // create post like
+  const newPostLike = await createTeamPostLike(db, postId, sessionUser.id)
 
-  return res.status(200).json({success: true})
+  // if post created return success
+  if (newPostLike) {
+    return res.status(200).json({success: true})
+  }
 }
