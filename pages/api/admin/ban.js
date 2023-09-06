@@ -1,23 +1,30 @@
 import { db } from "@/utils/db-server"
 
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]";
+import { getUserServerSession } from "@/utils/userServerSession";
 
 export default async function SendUserTeamInviteHandler(req, res) {
+  // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
-  // Check if user is admin
-  const session = await getServerSession(req, res, authOptions);
+  // get current session user
+  const sessionUser = await getUserServerSession(req, res);
+  if (!sessionUser) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
 
-  if (!session.user.admin)
+  // Check if user is admin
+  if (!sessionUser.admin)
     return res.status(404).json({Error: "Admin only access to this route"})
 
+  // retrieve payload parameters
   let username = req.body.username
   let banned = req.body.banned
 
+  // check if user with username exists
   if (!username || !await db.user.count({ where: { username: username } })) 
     return res.status(404).json({Error: "Invalid username"})
 
+  // update user to banned or unban
   const updateUser = await db.user.update({
     where: {
       username: username,
@@ -27,5 +34,8 @@ export default async function SendUserTeamInviteHandler(req, res) {
     },
   })
 
-  return res.status(200).json({ success: true })
+  // return success if user updated
+  if (updateUser) {
+    return res.status(200).json({ success: true })
+  }
 }
