@@ -6,7 +6,7 @@ export default function AliasList( { aliases }) {
   return (
     <Stack direction="row" spacing={1}>
     { aliases.map(alias =>
-            <Chip label={alias.game.name + ' : ' + alias.alias} />
+            <Chip label={alias.game.name + ' : ' + alias.alias} color='primary'/>
         )
     }
     </Stack>

@@ -2,9 +2,13 @@ import { useState } from "react";
 import { useSession } from "next-auth/react"
 import { db } from "@/utils/db-server";
 
+import TeamList from "@/components/TeamList";
+
 import { makeStyles } from "@mui/styles";
 import { Avatar, Stack } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Box, Typography } from "@mui/material";
+import GroupsIcon from '@mui/icons-material/Groups';
 
 import AddAliasModal from "@/components/AddAliasModal";
 import AliasList from "@/components/AliasList";
@@ -37,15 +41,25 @@ export default function UsersPage({ user }) {
                 direction="column"
                 justifyContent="center"
                 alignItems="center"
-                spacing={1}
+                spacing={3}
             >
-                <h1>{user.username}{isOwnProfile && ' (Your Profile)'}</h1>
+                <Typography variant="h3" sx={{margin: 3}} color="white">{user.username}{isOwnProfile && ' (Your Profile)'}</Typography>
                 <Avatar 
                     src={user.image}
                     sx={{ width: 100, height: 100 }}
                 />
-                <AliasList aliases={user.aliases}/>
-                <HoverIcon icon={<AddCircleIcon />} onClick={() => setShowAddAliasModal(true)}/>
+                <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 1}}>
+                    <AliasList aliases={user.aliases}/>
+                    { isOwnProfile && <HoverIcon icon={<AddCircleIcon />} onClick={() => setShowAddAliasModal(true)}/> }
+                </Box>
+
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                    <Box sx={{display: 'flex', gap: 1, color: 'white', ml: 2}}>
+                        <GroupsIcon />
+                        <Typography>TEAMS</Typography>
+                    </Box>
+                    <TeamList teams={user.teams} user={user}/>
+                </Box>
             </Stack>
             <AddAliasModal open={showAddAliasModal} setModal={setShowAddAliasModal}/>
         </>
@@ -66,7 +80,8 @@ export async function getServerSideProps({ req, res, query }) {
                 include: {
                     game: true
                 }
-            }
+            },
+            teams: true
         }
     })
    
