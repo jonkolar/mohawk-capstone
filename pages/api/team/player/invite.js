@@ -1,5 +1,6 @@
 import { db } from "@/utils/db-server"
-import { getUserServerSession, getUser } from "@/utils/services/user-service";
+import { getUser } from "@/utils/services/user-service";
+import { getUserServerSession } from "@/utils/userServerSession";
 import { createTeamPlayerInvite } from "@/utils/services/team-service";
 
 export default async function InvitePlayerHandler(req, res) {
