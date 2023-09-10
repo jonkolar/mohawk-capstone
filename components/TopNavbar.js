@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useTheme } from '@mui/material/styles';
 
 import Link from "./Link";
-import LoginButton from "./LoginButton";
 
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -10,7 +10,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -21,6 +20,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function TopNavbar() {
   const { data: session } = useSession()
+  const theme = useTheme();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -40,11 +40,12 @@ function TopNavbar() {
     setAnchorElUser(null);
   };
 
+  console.log(theme)
+
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar color="primary" position="static" sx={{ backgroundColor: theme.primary, borderBottom: 3, borderBottomColor: theme.palette.secondary.main }} elevation={0}>
+      <Container maxWidth="xl" sx={{borderBottom: '50px'}}>
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -55,12 +56,12 @@ function TopNavbar() {
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.2rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            ESPORTS TEAM MANAGER
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

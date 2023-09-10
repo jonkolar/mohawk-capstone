@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { getServerSession } from "next-auth/next"
-
 import { authOptions } from "../api/auth/[...nextauth]";
-import { db } from "@/utils/db-server";
 
 import CreateTeamModal from "@/components/CreateTeamModal";
 import TeamList from "@/components/TeamList";
-
-import Button from '@mui/material/Button';
-
+import { db } from "@/utils/db-server";
 import { deleteTeamCall } from "@/utils/api/team-api";
+
+import { Box, Typography } from "@mui/material";
+import Button from '@mui/material/Button';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 export default function AccountTeams({ user, teams, games }) {
     const [showCreateTeamModal, setShowCreateTeamModal] = useState(false)
@@ -28,13 +28,21 @@ export default function AccountTeams({ user, teams, games }) {
 
     return (
         <>
-            <div className="flex">
-                <h1>MY TEAMS</h1>
-                <TeamList teams={teams} user={user} onDeleteTeamHandler={onDeleteTeamHandler} />
-            </div>
-            <div>
-                <Button onClick={() => setShowCreateTeamModal(!showCreateTeamModal)}>Create Team</Button>
-            </div>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 5}}>
+            <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                    <Box sx={{display: 'flex', gap: 1, color: 'white', ml: 2}}>
+                        <GroupsIcon />
+                        <Typography>YOUR TEAMS</Typography>
+                    </Box>
+                    <TeamList teams={teams} user={user} onDeleteTeamHandler={onDeleteTeamHandler} />
+                </Box>
+                <Button variant="contained" 
+                        color='primary'
+                        sx={{marginTop: 2}}
+                        onClick={() => setShowCreateTeamModal(!showCreateTeamModal)}>
+                        Create New Team
+                </Button>
+            </Box>
 
             <CreateTeamModal open={showCreateTeamModal} setModal={setShowCreateTeamModal} user={user} games={games} />
         </>

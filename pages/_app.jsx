@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import { SessionProvider } from "next-auth/react"
+import { ThemeProvider, styled } from '@mui/material/styles';
+
+import theme from "@/utils/theme";
 import "../app/globals.css";
 import TopNavbar from "../components/TopNavbar"
 
@@ -10,12 +13,11 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   return (
-    <SessionProvider session={session}>
-          <TopNavbar />
-          <div style={{height: '100%'}}>
-
-          </div>
-          <Component {...pageProps}/>
-    </SessionProvider>
+      <SessionProvider session={session}>
+        <ThemeProvider theme={theme}>
+            <TopNavbar />
+            <Component {...pageProps}/>
+          </ThemeProvider>
+      </SessionProvider>
   )
 }

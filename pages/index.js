@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import Image from "next/image";
-import Head from 'next/head';
 
+import { useTheme } from '@mui/material/styles';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AppsIcon from '@mui/icons-material/Apps';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
@@ -14,6 +14,8 @@ import { Typography, Box } from "@mui/material";
 export default function Home({  }) {
     const { data: session } = useSession()
 
+    const theme = useTheme();
+
     return (
       <>
           <Box sx={{
@@ -24,7 +26,7 @@ export default function Home({  }) {
             padding: 3,
             gap: 10
           }}>
-            <Box sx={{borderLeft: 3, borderColor: 'blue', paddingLeft: 2, paddingRight: 2}}>
+            <Box sx={{borderLeft: 4, borderColor: theme.palette.primary.main, paddingLeft: 2, paddingRight: 2}}>
               <Typography variant="h3" color="white">MANAGE YOUR GAMING TEAMS</Typography>
               <Typography variant="h3" color="white">START TODAY</Typography>
             </Box>
