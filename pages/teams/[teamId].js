@@ -4,22 +4,30 @@ import { useSession } from "next-auth/react"
 import { db } from "@/utils/db-server";
 import { invitePlayerCall, deleteTeamCall } from "@/utils/api/team-api";
 import { retrieveTeamPostListCall } from "@/utils/api/team-api";
-import InvitePlayerModal from "@/components/InvitePlayerModal";
+
+import BoxLabelIconTopper from "@/components/BoxLabelIconTopper";
 import PlayerTable from "@/components/PlayerTable";
 import PostList from "@/components/PostList";
 import MatchList from "@/components/MatchList";
+import InvitePlayerModal from "@/components/InvitePlayerModal";
 import CreatePostModal from "@/components/CreatePostModal";
 import SendMatchChallengeModal from "@/components/SendMatchChallengeModal";
-
-import { Button } from "@mui/material";
 import ReceivedMatchChallengesModal from "@/components/ReceivedMatchChallengesModal";
+
+import { useTheme } from '@mui/material/styles';
+import { Button, Box, Typography } from "@mui/material";
+import InfoIcon from '@mui/icons-material/Info';
+import GroupsIcon from "@mui/icons-material/Groups";
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 export default function TeamPage({ team, initialPosts, matches, challenges }) {
     if (!team) {
         return <h1>Team does not exist</h1>
     }
 
-    const { data: session, status } = useSession()
+    const theme = useTheme();
+
+    const { data: session } = useSession()
 
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
     const [showCreatePostModal, setShowCreatePostModal] = useState(false);
@@ -90,40 +98,64 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
     }
 
     return (
-        <>
-            <h1>{team.name} ({team.game.name})</h1>
-            <p>Description: {team.description}</p>
-            <p>Owner: {team.owner.username}</p>
-            <h1>Roster:</h1>
-            <PlayerTable user={session ? session.user : null} players={team.players} isOwner={isOwner}/>
-            {isOwner &&
-            <>
-                <Button onClick={() => setShowInvitePlayerModal(true)}>Invite Player</Button>
-                <Button onClick={() => onDeleteTeamHandler(team.id)}>Delete Team</Button>
-            </>
-            }
-            <h1>Posts:</h1>
-            {isOwner &&
-                <Button onClick={() => setShowCreatePostModal(true)}>Create Post</Button>
-            }
-            <PostList user={session ? session.user : null} posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
-            <div>
-                <Button onClick={() => onPrevPostsHandler()} disabled={prevButtonDisabled}>Prev</Button>
-                <Button onClick={() => onNextPostsHandler()} disabled={nextButtonDisabled}>Next</Button>
-            </div>
-            <h1>Matches:</h1>
-            {isOwner &&
-            <>
-                <Button onClick={() => setShowSendMatchChallengeModal(true)}>Send Challenge</Button>
-                <Button onClick={() => setShowReceivedChallengesModal(true)}>View Challenges</Button>
-            </>
-            }
-            <MatchList matches={matches}/>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 3, gap: 5}}>
+            <Box>
+                <BoxLabelIconTopper icon={<InfoIcon fontSize="medium"/>} label="DETAILS"/>
+                <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.primary.main, 
+                        borderRadius: theme.border.radius, gap: 1, padding: 3, marginTop: 0.2}}>
+                    <Typography variant="h3" color={theme.palette.white}>{team.name}</Typography>
+                    <Typography variant="p" color={theme.palette.white}>Game: {team.game.name}</Typography>
+                    <Typography variant="p" color={theme.palette.white}>Description: {team.description}</Typography>
+                </Box>
+            </Box>
+
+            <Box sx={{display: 'flex', flexDirection: 'column', gap: 5, minWidth: '50%'}}>
+                <Box>
+                    <BoxLabelIconTopper icon={<GroupsIcon fontSize="medium"/>} label="ROSTER"/>
+                    <PlayerTable user={session ? session.user : null} team={team} isOwner={isOwner}/>
+                    {isOwner &&
+                        <Button variant="contained" onClick={() => setShowInvitePlayerModal(true)} sx={{ marginTop: 1 }}>Invite Player</Button> }
+                </Box>
+
+                <Box sx={{display: 'flex', gap: 3, width: '100%'}}>
+                    <Box sx={{ flex: 1}}>
+                        <BoxLabelIconTopper icon={<ChatBubbleIcon fontSize="small"/>} label="POSTS"/>
+                        <Box sx={{backgroundColor: theme.palette.primary.main, padding: 1, borderRadius: theme.border.radius, display: 'flex'}}>
+                            { posts.slice(postsOffset, postsOffset + postsToDisplay).length <= 0 && 
+                                <Typography sx={{color: theme.palette.white, marginLeft: 1}}>No posts...</Typography>}
+                            <PostList user={session ? session.user : null} posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
+                        </Box>
+                        <Box sx={{display: 'flex', gap: 1, marginTop: 1, justifyContent: 'space-between'}}>
+                            <Box sx={{display: 'flex', gap: 0.5}}>
+                                <Button variant="contained" onClick={() => onPrevPostsHandler()} disabled={prevButtonDisabled}>Prev</Button>
+                                <Button variant="contained" onClick={() => onNextPostsHandler()} disabled={nextButtonDisabled}>Next</Button>
+                            </Box>
+                            {isOwner && <Button variant="contained" onClick={() => setShowCreatePostModal(true)}>Create Post</Button>}
+                        </Box>
+                    </Box>
+
+                    <Box sx={{flex: 1}}>
+                        <BoxLabelIconTopper icon={<ChatBubbleIcon fontSize="small"/>} label="MATCHES"/>
+                        <Box sx={{backgroundColor: theme.palette.primary.main, padding: 3, borderRadius: theme.border.radius}}>
+                            <MatchList matches={matches}/>
+                        </Box>
+                        {isOwner &&
+                            <Box sx={{display: 'flex', justifyContent: 'space-between', marginTop: 1}}>
+                                <Button variant="contained" onClick={() => setShowSendMatchChallengeModal(true)}>Send Challenge</Button>
+                                <Button variant="contained" onClick={() => setShowReceivedChallengesModal(true)}>View Challenges</Button>
+                            </Box>
+                        }
+                    </Box>
+                </Box>
+            </Box>
+            {isOwner && 
+                    <Button onClick={() => onDeleteTeamHandler(team.id)} variant="contained" color="error" sx={{marginTop: 1}}>Delete Team</Button>}
+
             <InvitePlayerModal open={showInvitePlayerModal} setModal={setShowInvitePlayerModal} invitePlayerHandler={onInvitePlayerHandler}/>
             <CreatePostModal open={showCreatePostModal} setModal={setShowCreatePostModal} team={team}/>
             <SendMatchChallengeModal open={showSendMatchChallengeModal} setModal={setShowSendMatchChallengeModal} team={team}/>
             <ReceivedMatchChallengesModal open={showReceivedChallengesModal} setModal={setShowReceivedChallengesModal} challenges={challenges}/>
-        </>
+        </Box>
     )
 }
 

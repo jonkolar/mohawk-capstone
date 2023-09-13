@@ -1,9 +1,9 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import moment from 'moment';
 import { forwardRef } from 'react';
 import Link from './Link';
 
-
+import { useTheme } from '@mui/material/styles';
 
 const MatchListItem = forwardRef(({ match, onClick, href }, ref) => {
   const date = moment(match.date).format("MMM Do YYYY")
@@ -17,8 +17,11 @@ const MatchListItem = forwardRef(({ match, onClick, href }, ref) => {
 })
 
 export default function MatchList( { matches }) {
+  const theme = useTheme();
+
   return (
-    <Box>
+    <Box sx={{color: theme.palette.white}}>
+        {matches.length <= 0 && <Typography>No matches...</Typography>}
         {matches.map(match =>
             <Link useFunctionalComponent={true} href={"/matches/" + match.id}>
                 <MatchListItem key={match.id} match={match}/>

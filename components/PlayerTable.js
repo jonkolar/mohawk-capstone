@@ -5,7 +5,8 @@ import { updatePlayerAliasCall, playerLeaveTeamCall } from "@/utils/api/team-api
 
 import HoverIcon from "./HoverIcon";
 
-import { Box } from "@mui/material";
+import { useTheme } from "@mui/styles";
+import { Box, Typography } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,10 +19,14 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import CheckIcon from '@mui/icons-material/Check';
 import UndoIcon from '@mui/icons-material/Undo';
+import Stars from "@mui/icons-material/Stars";
 
-export default function PlayerTable({ user, players, isOwner }) {
+export default function PlayerTable({ user, team, isOwner }) {
   const [editPlayerAlias, setEditPlayerAlias] = useState(false);
   const [editPlayerAliasId, setEditPlayerAliasId] = useState(null);
+  const players = team.players;
+
+  const theme = useTheme();
 
   const onPlayerLeaveHandler = async (playerId) => {
     await playerLeaveTeamCall(playerId)
@@ -78,22 +83,26 @@ export default function PlayerTable({ user, players, isOwner }) {
   }
 
   return (
-    <TableContainer component={Paper} >
+    <TableContainer component={Paper}>
       <Table sx={{ minWidth: 655 }} size="small" aria-label="player table">
-        <TableHead>
+        <TableHead sx={{ backgroundColor: theme.palette.primary.main}}>
           <TableRow>
-            <TableCell>Account</TableCell>
-            <TableCell align="right">Alias</TableCell>
+            <TableCell sx={{ color: theme.palette.white }}>Account</TableCell>
+            <TableCell sx={{ color: theme.palette.white }}align="right">Alias</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
+          {players.length <= 0 && <Typography sx={{marginLeft: 2, padding: 1}}>No players on roster...</Typography>}
           {players.map((player) => (
             <TableRow
               key={player.user.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {player.user.username}
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                  <p>{player.user.username}</p>
+                  {player.user.id == team.ownerId && <Stars fontSize="5"/>}
+                </Box>
               </TableCell>
               <TableCell align="right">
                 { editPlayerAlias && editPlayerAliasId == player.id ?

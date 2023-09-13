@@ -13,6 +13,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import AddAliasModal from "@/components/AddAliasModal";
 import AliasList from "@/components/AliasList";
 import HoverIcon from "@/components/HoverIcon";
+import BoxLabeIconTopper from "@/components/BoxLabelIconTopper";
 
 const useStyles = makeStyles({
     iconHover: {
@@ -54,10 +55,7 @@ export default function UsersPage({ user }) {
                 </Box>
 
                 <Box sx={{display: 'flex', flexDirection: 'column'}}>
-                    <Box sx={{display: 'flex', gap: 1, color: 'white', ml: 2}}>
-                        <GroupsIcon />
-                        <Typography>TEAMS</Typography>
-                    </Box>
+                    <BoxLabeIconTopper icon={<GroupsIcon />} label="TEAMS"/>
                     <TeamList teams={user.teams} user={user}/>
                 </Box>
             </Stack>

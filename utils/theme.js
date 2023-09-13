@@ -14,4 +14,7 @@ export default createTheme({
         },
         white: '#f2f2f2'
       },
+    border: {
+      radius: 5
+    }
 });
