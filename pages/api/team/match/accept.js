@@ -1,6 +1,6 @@
 import { db } from "@/utils/db-server"
 
-import { getUserServerSession } from "@/utils/services/user-service"
+import { getUserServerSession } from "@/utils/userServerSession";
 import { createTeamMatch, deleteTeamMatchChallenge } from "@/utils/services/team-service";
 
 export default async function AcceptMatchHandler(req, res) {
