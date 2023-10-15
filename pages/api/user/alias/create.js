@@ -1,5 +1,6 @@
 import { db } from "@/utils/db-server"
-import { getUserServerSession, createUserAlias } from "@/utils/services/user-service";
+import { createUserAlias } from "@/utils/services/user-service";
+import { getUserServerSession } from "@/utils/userServerSession";
 
 // api/user/alias/create
 export default async (req, res) => {

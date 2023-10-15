@@ -74,7 +74,7 @@ export default function PlayerTable({ user, team, isOwner }) {
                 onChange={(e) => setAliasId(e.target.value)}
                 >
                 {
-                    aliasList.map(alias => <MenuItem value={alias.id}>{alias.alias}</MenuItem>)
+                    aliasList.map(alias => <MenuItem key={alias.id} value={alias.id}>{alias.alias}</MenuItem>)
                 }
                 </Select>
             <HoverIcon icon={<CheckIcon />} onClick={() => onUpdateAliasHandler()}/>
@@ -92,7 +92,7 @@ export default function PlayerTable({ user, team, isOwner }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {players.length <= 0 && <Typography sx={{marginLeft: 2, padding: 1}}>No players on roster...</Typography>}
+          {players.length <= 0 && <TableRow><Typography sx={{marginLeft: 2, padding: 1}}>No players on roster...</Typography></TableRow>}
           {players.map((player) => (
             <TableRow
               key={player.user.id}

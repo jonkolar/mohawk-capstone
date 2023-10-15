@@ -40,8 +40,6 @@ function TopNavbar() {
     setAnchorElUser(null);
   };
 
-  console.log(theme)
-
   return (
     <AppBar color="primary" position="static" sx={{ backgroundColor: theme.primary, borderBottom: 3, borderBottomColor: theme.palette.secondary.main }} elevation={0}>
       <Container maxWidth="xl" sx={{borderBottom: '50px'}}>

@@ -21,10 +21,6 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 export default function TeamPage({ team, initialPosts, matches, challenges }) {
-    if (!team) {
-        return <h1>Team does not exist</h1>
-    }
-
     const theme = useTheme();
 
     const { data: session } = useSession()
@@ -41,7 +37,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
     const [prevButtonDisabled, setPrevButtonDisabled] = useState(true);
     const [nextButtonDisabled, setNextButtonDisabled] = useState(!initialPosts.more);
 
-    const isOwner = session ? session.user.id == team.ownerId : false;
+    const isOwner = session && team ? session.user.id == team.ownerId : false;
     const postsToDisplay = 3;
 
     const onInvitePlayerHandler = async (username) => {
@@ -97,7 +93,8 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
         setPrevButtonDisabled(false);
     }
 
-    return (
+    return !team ? <h1>Team does not exist</h1> 
+    : (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 3, gap: 5}}>
             <Box>
                 <BoxLabelIconTopper icon={<InfoIcon fontSize="medium"/>} label="DETAILS"/>

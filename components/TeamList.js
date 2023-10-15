@@ -38,6 +38,7 @@ const TeamListItem = forwardRef(({ user, team, onClick, href, viewOnly=false }, 
         </a>
     )
   })
+TeamListItem.displayName = "TeamListItem";
 
 export default function TeamList({ teams, user }) {
   const theme = useTheme();
@@ -46,7 +47,7 @@ export default function TeamList({ teams, user }) {
     <List sx={{ width: '100%', maxWidth: 360, color: theme.palette.white, bgcolor: theme.palette.primary.main, borderRadius: 5}}>
         { teams.map(team => {
             return (
-                <Link useFunctionalComponent={true} href={"/teams/" + team.id}>
+                <Link key={team.id} useFunctionalComponent={true} href={"/teams/" + team.id}>
                     <TeamListItem team={team} user={user} />
                 </Link>
             )

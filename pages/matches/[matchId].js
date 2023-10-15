@@ -20,7 +20,7 @@ export const TeamBox = ({ team, theme }) => {
             <Box sx={{ width: 300, backgroundColor: theme.palette.primary.main, padding: 2, borderRadius: theme.border.radius}}>
                 { team.players.length <= 0 && <Typography color={theme.palette.white}>No Players...</Typography>}
                 { team.players.map(p => 
-                    <Link href={"/users/" + p.user.username}>
+                    <Link href={"/users/" + p.user.username} key={p.id}>
                         <Typography color={theme.palette.white}>{p.user.username} (Alias: {p.alias.alias})</Typography> 
                     </Link>) 
                 }
@@ -31,10 +31,6 @@ export const TeamBox = ({ team, theme }) => {
 }
 
 export default function MatchPage({ match }) {
-    if (!match) {
-        return <h1>Match does not exist</h1>
-    }
-
     const { data: session } = useSession()
     
     const theme = useTheme();
@@ -54,7 +50,9 @@ export default function MatchPage({ match }) {
             })
     }
 
-    return (
+    return !match ? 
+        <h1>Match does not exist</h1>
+    : (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center'}}>
             <Box sx={{display: 'flex', gap: 2, justifyContent: 'center', margin: 5, gap: 5}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 5, alignItems: 'center'}}>

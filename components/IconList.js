@@ -6,7 +6,7 @@ export default function IconList ({ items }) {
         <ul>
             {items.map(i => {
                 return (
-                    <li style={{display: 'flex', alignItems: 'center', gap: 10, color:"white"}}>
+                    <li key={items.indexOf(i)} style={{display: 'flex', alignItems: 'center', gap: 10, color:"white"}}>
                         {i.icon}
                         <Typography variant="h4">{i.label}</Typography>
                     </li>

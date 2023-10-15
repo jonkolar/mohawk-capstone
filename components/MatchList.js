@@ -7,7 +7,6 @@ import { useTheme } from '@mui/material/styles';
 
 const MatchListItem = forwardRef(({ match, onClick, href }, ref) => {
   const date = moment(match.date).format("MMM Do YYYY")
-
   return (
       <a href={href} onClick={onClick} ref={ref} style={{textDecoration: 'none', color: 'inherit'}}>
           <div>{match.team1.name} vs {match.team2.name}</div>
@@ -15,6 +14,7 @@ const MatchListItem = forwardRef(({ match, onClick, href }, ref) => {
       </a>
   )
 })
+MatchListItem.displayName = "MatchListItem";
 
 export default function MatchList( { matches }) {
   const theme = useTheme();
@@ -23,11 +23,10 @@ export default function MatchList( { matches }) {
     <Box sx={{color: theme.palette.white}}>
         {matches.length <= 0 && <Typography>No matches...</Typography>}
         {matches.map(match =>
-            <Link useFunctionalComponent={true} href={"/matches/" + match.id}>
-                <MatchListItem key={match.id} match={match}/>
+            <Link key={match.id} useFunctionalComponent={true} href={"/matches/" + match.id}>
+                <MatchListItem match={match}/>
             </Link>
         )}
     </Box>
-    
   )
 }

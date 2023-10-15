@@ -24,19 +24,16 @@ const useStyles = makeStyles({
 })
 
 export default function UsersPage({ user }) {
-    if (!user) {
-        return <h1>User does not exist</h1>
-    }
-
     const [showAddAliasModal, setShowAddAliasModal] = useState(false)
 
     const classes = useStyles();
 
     const { data: session } = useSession()
 
-    const isOwnProfile = session ? session.user.username == user.username : false
+    const isOwnProfile = session && user ? session.user.username == user.username : false
 
-    return (
+    return !user ? <h1>User does not exist</h1>
+    : (
         <>
             <Stack
                 direction="column"

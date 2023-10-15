@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `User` ADD COLUMN `admin` BOOLEAN NOT NULL DEFAULT false,
-    ADD COLUMN `banned` BOOLEAN NOT NULL DEFAULT false;

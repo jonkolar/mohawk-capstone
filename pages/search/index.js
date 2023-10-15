@@ -163,17 +163,17 @@ export default function Search({  }) {
                 </Box>
                 <TabPanel value={value} index={0}>
                     <h2>Team Results:</h2>
-                    {results.teams.map(team => <h3>{team.name}</h3>)}
+                    {results.teams.map(team => <h3 key={team.id}>{team.name}</h3>)}
                     <Button sx={{marginTop: 3}} onClick={() => onShowMoreTeamsButtonClicked()}>Show More</Button>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <h2>Post Results:</h2>
-                    {results.posts.map(post => <h3>{post.content} on {post.date}</h3>)}
+                    {results.posts.map(post => <h3 key={post.id}>{post.content} on {post.date}</h3>)}
                     <Button sx={{marginTop: 3}} onClick={() => onShowMorePostsButtonClicked()}>Show More</Button>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <h2>User Results:</h2>
-                    {results.users.map(user => <h3>{user.username}</h3>)}
+                    {results.users.map(user => <h3 key={user.id}>{user.username}</h3>)}
                     <Button sx={{marginTop: 3}} onClick={() => onShowMoreUsersButtonClicked()}>Show More</Button>
                 </TabPanel>
             </Box>

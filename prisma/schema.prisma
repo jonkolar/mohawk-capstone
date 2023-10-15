@@ -1,10 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// datasource db {
+//   provider          = "mysql"
+//   url               = env("DATABASE_URL")
+//   shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
+// }
+
 datasource db {
-  provider          = "mysql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -149,7 +154,6 @@ model Match {
   team1Id     Int 
   team2Id     Int
   date        DateTime
-  winner      Int?
 
   team1 Team @relation(fields: [team1Id], references: [id], onDelete: Cascade, name: "team1")
   team2 Team @relation(fields: [team2Id], references: [id], onDelete: Cascade, name: "team2")

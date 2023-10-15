@@ -1,8 +1,0 @@
--- AddForeignKey
-ALTER TABLE `Team` ADD CONSTRAINT `Team_gameId_fkey` FOREIGN KEY (`gameId`) REFERENCES `Game`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Player` ADD CONSTRAINT `Player_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Player` ADD CONSTRAINT `Player_aliasId_fkey` FOREIGN KEY (`aliasId`) REFERENCES `Alias`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
