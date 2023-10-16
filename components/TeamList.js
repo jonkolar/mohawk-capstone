@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import WorkspacesIcon from '@mui/icons-material/WorkSpaces';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import StarsIcon from '@mui/icons-material/Stars';
 
 import Link from './Link';
