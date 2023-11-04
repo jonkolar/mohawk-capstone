@@ -116,9 +116,12 @@ export async function getServerSideProps(context) {
     // SIGNUP DATA
 
     // Query signups by month data from database then downcast (because mysql returns bigint which is not serializable)
-    const userCreatedQueryResult = await db.$queryRaw`SELECT MONTH(created) AS created_month, YEAR(created) as created_year, COUNT(*) AS count 
-                                      from User 
-                                      GROUP BY created_year, created_month`
+    const userCreatedQueryResult = await db.$queryRaw`SELECT 
+                                                        EXTRACT(MONTH FROM created) AS created_month, 
+                                                        EXTRACT(YEAR FROM created) AS created_year,
+                                                        COUNT(*) AS count
+                                                    FROM "User"
+                                                    GROUP BY created_month, created_year`
     let signupsByMonth = userCreatedQueryResult.map(d => {
         const year = parseInt(d.created_year)
         const month = moment().month(parseInt(d.created_month - 1)).format("MMMM")
