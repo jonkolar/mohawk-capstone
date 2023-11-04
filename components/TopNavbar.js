@@ -150,6 +150,13 @@ function TopNavbar() {
                     <Typography textAlign="center">Teams</Typography>
                   </Link>
                 </MenuItem>
+                {session.user.admin &&
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Link href={"/admin"}>
+                      <Typography textAlign="center">Admin</Typography>
+                    </Link>
+                  </MenuItem>
+                }
                 <MenuItem onClick={() => signOut()}>
                     <Typography textAlign="center" >Sign Out</Typography>
                 </MenuItem>

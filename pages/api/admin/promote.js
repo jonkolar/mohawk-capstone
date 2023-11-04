@@ -2,7 +2,7 @@ import { db } from "@/utils/db-server"
 
 import { getUserServerSession } from "@/utils/userServerSession";
 
-export default async function AdminBanHandler(req, res) {
+export default async function AdminPromoteHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
 
@@ -18,19 +18,19 @@ export default async function AdminBanHandler(req, res) {
 
   // retrieve payload parameters
   let username = req.body.username
-  let banned = req.body.banned
+  let promote = req.body.promote
 
   // check if user with username exists
   if (!username || !await db.user.count({ where: { username: username } })) 
     return res.status(404).json({Error: "Invalid username"})
 
-  // update user to banned or unban
+  // update user to promoted to admin or demoted
   const updateUser = await db.user.update({
     where: {
       username: username,
     },
     data: {
-      banned: banned,
+      admin: promote,
     },
   })
 

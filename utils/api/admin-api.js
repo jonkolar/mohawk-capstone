@@ -11,3 +11,15 @@ export async function adminBanUserCall(username, banned) {
         return false
     }
 }
+
+export async function adminPromoteUserCall(username, promote) {
+    try {
+        const response = await apiClient.post("/admin/promote", {
+            username: username,
+            promote: promote
+        })
+        return response.data
+    } catch (error) {
+        return false
+    }
+}

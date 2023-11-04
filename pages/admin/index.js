@@ -1,30 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useTheme } from "@mui/styles";
 import moment from "moment";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-import { adminBanUserCall } from "@/utils/api/admin-api";
+import { adminBanUserCall, adminPromoteUserCall } from "@/utils/api/admin-api";
+import { db } from "@/utils/db-server"
+import BoxLabelIconTopper from "@/components/BoxLabelIconTopper";
 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import NumbersIcon from '@mui/icons-material/Numbers';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-
-import { db } from "@/utils/db-server"
 
 const AdminSignupsChart = dynamic(
     () => import('../../components/AdminSignupsChart'),
     { ssr: false, loading: () => <p>Loading...</p> }
   )
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export default function Admin({ user, data }) {
+    const theme = useTheme();
+
     const [banUsername, setBanUsername] = useState("")
     const [unbanUsername, setUnbanUsername] = useState("")
-
+    const [promoteUsername, setPromoteUsername] = useState("")
+    const [demoteUsername, setDemoteUsername] = useState("")
 
     const onBanSubmit = async (e) => {
         e.preventDefault()  
@@ -52,55 +58,105 @@ export default function Admin({ user, data }) {
         })
     }
 
+    const onPromoteSubmit = async (e) => {
+        e.preventDefault()  
+        
+        await adminPromoteUserCall(promoteUsername, true)
+        .then(d => {
+            if (d) {
+                location.reload();
+            } else {
+                console.log("something went wrong");
+            }
+        })
+    }
+
+    const onDemoteSubmit = async (e) => {
+        e.preventDefault()  
+        
+        await adminPromoteUserCall(demoteUsername, false)
+        .then(d => {
+            if (d) {
+                location.reload();
+            } else {
+                console.log("something went wrong");
+            }
+        })
+    }
 
     return (
-        <>
-            <h1>Data</h1>
-            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch', gap: 2}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', margin: 5, gap: 5}}>
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Typography variant="h6" color={theme.palette.white}>Admin</Typography>
+            </Box>
+            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 2, flexWrap: 'wrap'}}>
                 <Box>
+                    <BoxLabelIconTopper icon={<BarChartIcon fontSize="medium"/>} label="Signups"/>
                     <AdminSignupsChart data={data.signup} />
                 </Box>
-                <Box>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                    <BoxLabelIconTopper icon={<NumbersIcon fontSize="medium"/>} label="Statistics"/>
                     <Box sx={{ 
                             paddingX: '30px',
-                            backgroundColor: 'lightgrey',
                             height: '100%',
+                            backgroundColor: theme.palette.white,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            borderRadius: '10px',
-                            display: 'flex',
+                            borderRadius: theme.border.radius,
                             flexDirection: 'column'
                         }}
                     >
-                        <h3>Total Users: {data.userCount}</h3>
-                        <h3>Total Banned Users: {data.userBanCount}</h3>
-                        <h3>Total Teams: {data.teamCount}</h3>
-                        <h3>Total Posts: {data.postCount}</h3>
-                        <h3>Total Matches: {data.matchCount}</h3>
+                        <Typography variant="h6">Total Users: {data.userCount}</Typography>
+                        <Typography variant="h6">Total Banned Users: {data.userBanCount}</Typography>
+                        <Typography variant="h6">Total Teams: {data.teamCount}</Typography>
+                        <Typography variant="h6">Total Posts: {data.postCount}</Typography>
+                        <Typography variant="h6">Total Matches: {data.matchCount}</Typography>
                     </Box>
                 </Box>
             </Box>
-            <h1>Moderation</h1>
 
-            <Box sx={{display: 'flex', gap: 3, justifyContent: 'center'}}>
-                <form method="POST" onSubmit={onBanSubmit}>
-                    <h3>Ban User:</h3>
-                    <FormControl>
-                        <TextField id="ban-username" label="Username" variant="outlined" onChange={(e) => setBanUsername(e.target.value)} value={banUsername} />
-                        <Button type="submit" variant="contained">Ban</Button>
-                    </FormControl>
-                </form>
 
-                <form method="POST" onSubmit={onUnbanSubmit}>
-                    <h3>Unban User:</h3>
-                    <FormControl>
-                        <TextField id="unban-username" label="Username" variant="outlined" onChange={(e) => setUnbanUsername(e.target.value)} value={unbanUsername} />
-                        <Button type="submit" variant="contained">Unban</Button>
-                    </FormControl>
-                </form>
+            <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+                <Box>
+                    <BoxLabelIconTopper icon={<AdminPanelSettingsIcon fontSize="medium"/>} label="Moderation"/>
+                    <Box sx={{display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', backgroundColor: theme.palette.white, padding: 2, borderRadius: theme.border.radius}}>
+                        <form method="POST" onSubmit={onBanSubmit}>
+                            <Typography>Ban User</Typography>
+                            <FormControl>
+                                <TextField id="ban-username" label="Username" variant="outlined" onChange={(e) => setBanUsername(e.target.value)} value={banUsername} />
+                                <Button type="submit" variant="contained">Ban</Button>
+                            </FormControl>
+                        </form>
+
+                        <form method="POST" onSubmit={onUnbanSubmit}>
+                            <Typography>Unban User</Typography>
+                            <FormControl>
+                                <TextField id="unban-username" label="Username" variant="outlined" onChange={(e) => setUnbanUsername(e.target.value)} value={unbanUsername} />
+                                <Button type="submit" variant="contained">Unban</Button>
+                            </FormControl>
+                        </form>
+
+                        <form method="POST" onSubmit={onPromoteSubmit}>
+                            <Typography>Promote User to Admin</Typography>
+                            <FormControl>
+                                <TextField id="unban-username" label="Username" variant="outlined" onChange={(e) => setPromoteUsername(e.target.value)} value={promoteUsername} />
+                                <Button type="submit" variant="contained">Promote</Button>
+                            </FormControl>
+                        </form>
+
+                        <form method="POST" onSubmit={onDemoteSubmit}>
+                            <Typography>Demote User from Admin</Typography>
+                            <FormControl>
+                                <TextField id="unban-username" label="Username" variant="outlined" onChange={(e) => setDemoteUsername(e.target.value)} value={demoteUsername} />
+                                <Button type="submit" variant="contained">Demote</Button>
+                            </FormControl>
+                        </form>
+                    </Box>
+                </Box>
             </Box>
-        </>
+
+        </Box>
     )
 }
 
