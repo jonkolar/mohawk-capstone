@@ -2,7 +2,7 @@ import { forwardRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
 import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -45,6 +45,7 @@ export default function TeamList({ teams, user }) {
 
   return (
     <List sx={{ width: '100%', maxWidth: 360, color: theme.palette.white, bgcolor: theme.palette.primary.main, borderRadius: 5}}>
+        { teams.length <= 0 && <Typography variant='h6' style={{margin: 6}}>No teams exist... create one!</Typography> }
         { teams.map(team => {
             return (
                 <Link key={team.id} useFunctionalComponent={true} href={"/teams/" + team.id}>
