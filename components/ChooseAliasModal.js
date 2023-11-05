@@ -46,13 +46,11 @@ export default function ChooseAliasModal({ open, setModal, user, invite }) {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        
-        console.log("SUBMIT")
 
         const response = await userAcceptTeamInviteCall(invite.id, true, aliasId)
             .then(response => {
                 setModal(false);
-                location.reload();
+                location.replace("/teams/" + invite.teamId)
             })
         }
 
