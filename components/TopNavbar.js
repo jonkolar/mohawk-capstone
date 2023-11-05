@@ -40,6 +40,10 @@ function TopNavbar() {
     setAnchorElUser(null);
   };
 
+  // if user is signed in but hasn't chosen a username, redirect to choose-username page
+  if (session && !session.user.username && location.pathname != "/account/choose-username")
+    location.replace("/account/choose-username");
+
   return (
     <AppBar color="primary" position="static" sx={{ backgroundColor: theme.primary, borderBottom: 3, borderBottomColor: theme.palette.secondary.main }} elevation={0}>
       <Container maxWidth="xl" sx={{borderBottom: '50px'}}>

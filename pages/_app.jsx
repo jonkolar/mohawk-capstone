@@ -1,12 +1,9 @@
-import { useEffect } from "react";
 import { SessionProvider } from "next-auth/react"
-import { ThemeProvider, styled } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 
 import theme from "@/utils/theme";
 import "../app/globals.css";
 import TopNavbar from "../components/TopNavbar"
-
-import { Box } from "@mui/material";
 
 export default function App({
   Component,
