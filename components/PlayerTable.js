@@ -49,7 +49,7 @@ export default function PlayerTable({ user, team, isOwner }) {
       }
 
       retrieveAliases();
-    }, [])
+    }, [player.user.id])
 
     const onUpdateAliasHandler = async () => {
       if (aliasId == player.alias.id) {
