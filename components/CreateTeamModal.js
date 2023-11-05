@@ -21,14 +21,13 @@ const style = {
     boxShadow: 24,
     p: 4,
     borderRadius: 5,
-    //
     display: 'flex',
     justifyContent: 'center',
 };
 
 export default function CreateTeamModal({ user, open, setModal, games }) {
     const [name, setName] = useState('')
-    const [gameId, setGameId] = useState(games.length > 0 ? games[0] : null)
+    const [gameId, setGameId] = useState(games.length > 0 ? games[0].id : null)
     const [description, setDescription] = useState('')
 
     const handleClose = () => {

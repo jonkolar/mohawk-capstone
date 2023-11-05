@@ -10,7 +10,6 @@ const useStyles = makeStyles({
 
 export default function HoverIcon({ icon, onClick }) {
     const classes = useStyles();
-
     return (
         <div onClick={onClick} className={classes.iconHover} style={{color: 'grey'}}>
             {icon}

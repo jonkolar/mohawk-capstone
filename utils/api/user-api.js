@@ -48,6 +48,17 @@ export async function userAddAliasCall(gameId, alias) {
     }
 }
 
+export async function userDeleteAliasCall(aliasId) {
+    try {
+        const response = await apiClient.post("/user/alias/delete", {
+            aliasId: aliasId
+        })
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
 export async function userRetrieveAllAliasCall(userId) {
     try {
         const response = await apiClient.post("/user/alias/all", {

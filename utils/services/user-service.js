@@ -19,3 +19,13 @@ export async function createUserAlias(db, userId, alias, gameId) {
 
     return newAlias;
 }
+
+export async function deleteUserAlias(db, aliasId) {
+    const deletedAlias = await db.alias.delete({
+        where: {
+            id: aliasId
+        }
+    })
+
+    return deletedAlias;
+}

@@ -29,13 +29,15 @@ const style = {
 
 export default function AddAliasModal({ open, setModal, user }) {
     const [games, setGames] = useState([])
-    const [gameId, setGameId] = useState(games.length > 0 ? games[0] : null)
+    const [gameId, setGameId] = useState(games.length > 0 ? games[0].id : null)
     const [alias, setAlias] = useState('')
 
     useEffect(() => {
         const retrieveGames = async () => {
             const data = await retrieveGamesCall();
             setGames(data.games)
+            if (data.games.length >= 0)
+                setGameId(data.games[0].id)
         }
 
         retrieveGames()

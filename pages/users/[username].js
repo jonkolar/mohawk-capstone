@@ -26,8 +26,6 @@ const useStyles = makeStyles({
 export default function UsersPage({ user }) {
     const [showAddAliasModal, setShowAddAliasModal] = useState(false)
 
-    const classes = useStyles();
-
     const { data: session } = useSession()
 
     const isOwnProfile = session && user ? session.user.username == user.username : false
