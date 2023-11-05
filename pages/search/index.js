@@ -198,7 +198,7 @@ export default function Search({  }) {
                     <Typography variant="h6" color={theme.palette.white} sx={{marginBottom: 3}}>Team Results:</Typography>
                     <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         {results.teams.length <= 0 && <Typography variant="h5" color={theme.palette.white}>No results...</Typography>}
-                        {results.teams.map(team => <Link href={"/teams/" + team.id}>
+                        {results.teams.map(team => <Link href={"/teams/" + team.id} key={team.id}>
                                                       <Typography variant="h5" key={team.id} color={theme.palette.white}>{team.name}</Typography>
                                                    </Link>)}
                         {!resultsDoneFlags.teams && <Button variant="contained" sx={{marginTop: 3}} onClick={() => onShowMoreTeamsButtonClicked()}>Show More</Button>}
@@ -216,7 +216,7 @@ export default function Search({  }) {
                     <Typography variant="h6" color={theme.palette.white} sx={{marginBottom: 3}}>User Results:</Typography>
                     <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         {results.users.length <= 0 && <Typography variant="h5" color={theme.palette.white}>No results...</Typography>}
-                        {results.users.map(user => <Link href={"/users/" + user.username}>
+                        {results.users.map(user => <Link href={"/users/" + user.username} key={user.id}>
                                                       <Typography variant="h5" key={user.id} color={theme.palette.white}>{user.username}</Typography>
                                                    </Link>)}
                         {!resultsDoneFlags.users && <Button variant="contained" sx={{marginTop: 3}} onClick={() => onShowMoreUsersButtonClicked()}>Show More</Button> }
