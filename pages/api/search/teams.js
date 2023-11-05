@@ -13,20 +13,21 @@ export default async function searchTeamsHandler(req, res) {
 
   // retrieve payload parameters
   let search = req.body.search;
-  let cursor = req.body.cursor
+  let cursor = req.body.cursor;
 
   // retrieve paginated teams
   let teams = [];
   if (cursor) {
     teams = await db.team.findMany({
-        take: 1,
+        take: 3,
         skip: 1,
         cursor: {
             id: cursor
         },
         where: {
             name: {
-                contains: search
+                contains: search,
+                mode: 'insensitive',
             }
         },
         orderBy: {
@@ -35,7 +36,7 @@ export default async function searchTeamsHandler(req, res) {
     })
   } else {
     teams = await db.team.findMany({
-        take: 1,
+        take: 3,
         where: {
             name: {
                 contains: search

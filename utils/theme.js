@@ -12,7 +12,8 @@ export default createTheme({
             main: '#000000',
             secondary: '#282e36'
         },
-        white: '#f2f2f2'
+        white: '#f2f2f2',
+        black: 'black'
       },
     border: {
       radius: 5

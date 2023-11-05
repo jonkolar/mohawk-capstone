@@ -13,21 +13,26 @@ export default async function searchPostsHandler(req, res) {
 
   // retrieve payload parameters
   let search = req.body.search;
-  let cursor = req.body.cursor
+  let cursor = req.body.cursor;
 
   // retrieve paginated posts
   let posts = [];
   if (cursor) {
     posts = await db.post.findMany({
-        take: 1,
+        take: 3,
         skip: 1,
         cursor: {
             id: cursor
         },
         where: {
             content: {
-                contains: search
+                contains: search,
+                mode: 'insensitive'
             }
+        },
+        include: {
+            likes: true,
+            team: true
         },
         orderBy: {
             date: 'desc'
@@ -35,11 +40,15 @@ export default async function searchPostsHandler(req, res) {
     })
   } else {
     posts = await db.post.findMany({
-        take: 1,
+        take: 3,
         where: {
             content: {
                 contains: search
             }
+        },
+        include: {
+            likes: true,
+            team: true
         },
         orderBy: {
             date: 'desc'

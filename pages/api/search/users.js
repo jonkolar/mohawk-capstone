@@ -13,20 +13,21 @@ export default async function searchUsersHandler(req, res) {
 
   // retrieve payload parameters
   let search = req.body.search;
-  let cursor = req.body.cursor
+  let cursor = req.body.cursor;
 
   // retrieve paginated user results
   let users = [];
   if (cursor) {
     users = await db.user.findMany({
-        take: 1,
+        take: 3,
         skip: 1,
         cursor: {
             id: cursor
         },
         where: {
             username: {
-                contains: search
+                contains: search,
+                mode: 'insensitive'
             }
         },
         orderBy: {
@@ -35,7 +36,7 @@ export default async function searchUsersHandler(req, res) {
     })
   } else {
     users = await db.user.findMany({
-        take: 1,
+        take: 3,
         where: {
             username: {
                 contains: search

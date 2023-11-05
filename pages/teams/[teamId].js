@@ -120,7 +120,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                         <Box sx={{backgroundColor: theme.palette.primary.main, padding: 1, borderRadius: theme.border.radius, display: 'flex'}}>
                             { posts.slice(postsOffset, postsOffset + postsToDisplay).length <= 0 && 
                                 <Typography sx={{color: theme.palette.white, marginLeft: 1}}>No posts...</Typography>}
-                            <PostList user={session ? session.user : null} posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
+                            <PostList posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
                         </Box>
                         <Box sx={{display: 'flex', gap: 1, marginTop: 1, justifyContent: 'space-between'}}>
                             <Box sx={{display: 'flex', gap: 0.5}}>
@@ -185,7 +185,8 @@ export async function getServerSideProps({ req, res, query }) {
             teamId: parseInt(teamId)
         },
         include: {
-            likes: true
+            likes: true,
+            team: true
         },
         orderBy: {
             date: 'desc'

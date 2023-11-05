@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 
-import { TextField, InputAdornment, Button } from "@mui/material"
+import Link from "@/components/Link";
+import PostList from "@/components/PostList";
+
+import { useTheme } from "@mui/styles";
+import { TextField, InputAdornment, Button, Typography } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Tabs, Tab, } from "@mui/material";
 
@@ -24,6 +28,7 @@ function TabPanel({ children, value, index }) {
 export default function Search({  }) {
     const { data: session } = useSession();
     const router = useRouter()
+    const theme = useTheme();
 
     const [value, setValue] = useState(0);
  
@@ -33,6 +38,11 @@ export default function Search({  }) {
         posts: [],
         users: [],
     });
+    const [resultsDoneFlags, setResultsDoneFlags] = useState({
+        teams: false,
+        posts: false,
+        users: false
+    })
     const [resultsCursors, setResultsCursors] = useState({
         teams: null,
         posts: null,
@@ -76,6 +86,8 @@ export default function Search({  }) {
                 }),
             ])
 
+            setResultsDoneFlags({teams: initialTeams.length <= 2, posts: initialPosts.length <= 2, users: initialUsers.length <= 2})
+
             setResults({
                 teams: initialTeams,
                 posts: initialPosts,
@@ -112,6 +124,9 @@ export default function Search({  }) {
     const onShowMoreTeamsButtonClicked = async () => {
         await searchTeamsCall(search, resultsCursors.teams)
         .then(data => {
+            if (data.results.length <= 2)
+                setResultsDoneFlags({teams: true, posts: resultsDoneFlags.posts, users: resultsDoneFlags.users})
+
             addToResults({ newTeams: data.results })
             updateResultsCursors({ teamsCursor: data.results.length > 0 ? data.results[data.results.length - 1].id : resultsCursors.teams })
         })
@@ -120,6 +135,8 @@ export default function Search({  }) {
     const onShowMorePostsButtonClicked = async () => {
         await searchPostsCall(search, resultsCursors.posts)
         .then(data => {
+            if (data.results.length <= 2)
+                setResultsDoneFlags({teams: resultsDoneFlags.teams, posts: true, users: resultsDoneFlags.users})
             addToResults({ newPosts: data.results })
             updateResultsCursors({ postsCursor: data.results.length > 0 ? data.results[data.results.length - 1].id : resultsCursors.posts })
         })
@@ -128,7 +145,8 @@ export default function Search({  }) {
     const onShowMoreUsersButtonClicked = async () => {
         await searchUsersCall(search, resultsCursors.users)
         .then(data => {
-            console.log(data)
+            if (data.results.length <= 2)
+                setResultsDoneFlags({teams: resultsDoneFlags.teams, posts: resultsDoneFlags.posts, users: true})
             addToResults({ newUsers: data.results })
             updateResultsCursors({ usersCursor: data.results.length > 0 ? data.results[data.results.length - 1].id : resultsCursors.users })
         })
@@ -139,11 +157,14 @@ export default function Search({  }) {
             <TextField
                 id="search"
                 type="search"
-                label="Search"
+                placeholder="Search"
                 value={search}
                 onKeyDown={onSubmitSearchHandler}
                 onChange={e => setSearch(e.target.value)}
-                sx={{ width: '75%', marginTop: 5 }}
+                InputLabelProps={{
+                    shrink: true,
+                  }}
+                sx={{ width: '75%', marginTop: 5, marginBottom: 5, backgroundColor: theme.palette.white, borderRadius: 2}}
                 InputProps={{
                     endAdornment: (
                     <InputAdornment position="end">
@@ -153,30 +174,56 @@ export default function Search({  }) {
                 }}
             />
 
+            { router.query.q &&
             <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'center'}}>
-                    <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" >
+                <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'center', backgroundColor: theme.palette.white}} >
+                    <Tabs 
+                        value={value} 
+                        onChange={handleTabChange} 
+                        aria-label="basic tabs example" 
+                        TabIndicatorProps={{
+                            style: {
+                              backgroundColor: theme.palette.primary.main,
+                            }
+                          }}
+                        textColor="primary"
+                        
+                    >
                         <Tab label="Teams" />
                         <Tab label="Posts" />
                         <Tab label="Users" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <h2>Team Results:</h2>
-                    {results.teams.map(team => <h3 key={team.id}>{team.name}</h3>)}
-                    <Button sx={{marginTop: 3}} onClick={() => onShowMoreTeamsButtonClicked()}>Show More</Button>
+                    <Typography variant="h6" color={theme.palette.white} sx={{marginBottom: 3}}>Team Results:</Typography>
+                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        {results.teams.length <= 0 && <Typography variant="h5" color={theme.palette.white}>No results...</Typography>}
+                        {results.teams.map(team => <Link href={"/teams/" + team.id}>
+                                                      <Typography variant="h5" key={team.id} color={theme.palette.white}>{team.name}</Typography>
+                                                   </Link>)}
+                        {!resultsDoneFlags.teams && <Button variant="contained" sx={{marginTop: 3}} onClick={() => onShowMoreTeamsButtonClicked()}>Show More</Button>}
+                    </Box>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <h2>Post Results:</h2>
-                    {results.posts.map(post => <h3 key={post.id}>{post.content} on {post.date}</h3>)}
-                    <Button sx={{marginTop: 3}} onClick={() => onShowMorePostsButtonClicked()}>Show More</Button>
+                    <Typography variant="h6" color={theme.palette.white} sx={{marginBottom: 3}}>Post Results:</Typography>
+                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        {results.posts.length <= 0 && <Typography variant="h5" color={theme.palette.white}>No results...</Typography>}
+                        <PostList posts={results.posts} />
+                        {!resultsDoneFlags.posts && <Button variant="contained" sx={{marginTop: 3}} onClick={() => onShowMorePostsButtonClicked()}>Show More</Button>}
+                    </Box>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <h2>User Results:</h2>
-                    {results.users.map(user => <h3 key={user.id}>{user.username}</h3>)}
-                    <Button sx={{marginTop: 3}} onClick={() => onShowMoreUsersButtonClicked()}>Show More</Button>
+                    <Typography variant="h6" color={theme.palette.white} sx={{marginBottom: 3}}>User Results:</Typography>
+                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        {results.users.length <= 0 && <Typography variant="h5" color={theme.palette.white}>No results...</Typography>}
+                        {results.users.map(user => <Link href={"/users/" + user.username}>
+                                                      <Typography variant="h5" key={user.id} color={theme.palette.white}>{user.username}</Typography>
+                                                   </Link>)}
+                        {!resultsDoneFlags.users && <Button variant="contained" sx={{marginTop: 3}} onClick={() => onShowMoreUsersButtonClicked()}>Show More</Button> }
+                    </Box>
                 </TabPanel>
             </Box>
+            }
         </Box>
     )
   }

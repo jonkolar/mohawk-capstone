@@ -197,7 +197,8 @@ export async function getTeamPostsPagination(db, teamId, cursor=null) {
         teamId: teamId
       },
       include: {
-        likes: true
+        likes: true,
+        team: true
       },
       orderBy: {
         date: 'desc'
@@ -214,7 +215,8 @@ export async function getTeamPostsPagination(db, teamId, cursor=null) {
         teamId: teamId
       },
       include: {
-        likes: true
+        likes: true,
+        team: true
       },
       orderBy: {
         date: 'desc'
