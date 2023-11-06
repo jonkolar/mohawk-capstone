@@ -224,6 +224,7 @@ export async function getServerSideProps(context) {
 
     data['matchCount'] = await db.match.count()
 
+    console.log(data)
 
 
     return {

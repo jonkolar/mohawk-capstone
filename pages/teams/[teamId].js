@@ -13,6 +13,7 @@ import InvitePlayerModal from "@/components/InvitePlayerModal";
 import CreatePostModal from "@/components/CreatePostModal";
 import SendMatchChallengeModal from "@/components/SendMatchChallengeModal";
 import ReceivedMatchChallengesModal from "@/components/ReceivedMatchChallengesModal";
+import PageNotFound from "@/components/PageNotFound";
 
 import { useTheme } from '@mui/material/styles';
 import { Button, Box, Typography } from "@mui/material";
@@ -93,7 +94,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
         setPrevButtonDisabled(false);
     }
 
-    return !team ? <h1>Team does not exist</h1> 
+    return !team ? <PageNotFound label="Team Doesn't Exist"/>
     : (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 3, gap: 5}}>
             <Box>

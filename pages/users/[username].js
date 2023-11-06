@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react"
 import { db } from "@/utils/db-server";
 
 import TeamList from "@/components/TeamList";
+import PageNotFound from "@/components/PageNotFound";
 
 import { makeStyles } from "@mui/styles";
 import { Avatar, Stack } from "@mui/material";
@@ -30,7 +31,7 @@ export default function UsersPage({ user }) {
 
     const isOwnProfile = session && user ? session.user.username == user.username : false
 
-    return !user ? <h1>User does not exist</h1>
+    return !user ? <PageNotFound label="User Doesn't Exist"/>
     : (
         <>
             <Stack

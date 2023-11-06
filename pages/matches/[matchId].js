@@ -12,6 +12,7 @@ import { Box, Button, Typography } from "@mui/material";
 import GroupsIcon from "@mui/icons-material/Groups";
 import InfoIcon from '@mui/icons-material/Info';
 import { useTheme } from "@mui/styles";
+import PageNotFound from "@/components/PageNotFound";
 
 export const TeamBox = ({ team, theme }) => {
     return (
@@ -48,8 +49,7 @@ export default function MatchPage({ match }) {
             })
     }
 
-    return !match ? 
-        <h1>Match does not exist</h1>
+    return !match ? <PageNotFound label="Match Doesn't Exist" />
     : (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center'}}>
             <Box sx={{display: 'flex', gap: 2, justifyContent: 'center', margin: 5, gap: 5}}>

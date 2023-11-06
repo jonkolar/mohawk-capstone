@@ -12,8 +12,6 @@ import IconList from "@/components/IconList";
 import { Typography, Box } from "@mui/material";
 
 export default function Home({  }) {
-    const { data: session } = useSession()
-
     const theme = useTheme();
     
     return (
