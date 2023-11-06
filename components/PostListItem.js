@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useSession } from "next-auth/react"
 import moment from 'moment';
 
-import { createPostLikeCall, removePostLikeCall } from '@/utils/api/team-api';
+import { deletePostCall, createPostLikeCall, removePostLikeCall } from '@/utils/api/team-api';
 import HoverIcon from './HoverIcon';
 
 import { useTheme } from "@mui/styles";
-import {Typography} from "@mui/material"
+import DeleteIcon from '@mui/icons-material/Delete';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -33,27 +33,43 @@ export default function PostListItem ({ post }) {
         } else {
             await removePostLikeCall(post.id)
             .then((data) => {
-                if (data)
+                if (data) {
                     setLiked(false)
                     setLikeCount(likeCount - 1)
+                }
             })
         }
     }
 
+    const deleteIconClickedHandler = async () => {
+        await deletePostCall(post.id)
+        .then(data => {
+            if (data.success)
+                location.reload();
+        })
+    }
+
     return (
-        <ListItem>
-            <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column', marginRight: '10px'}}>
-                { liked ?
-                <HoverIcon icon={<FavoriteIcon fontSize='small' sx={{ color: 'red'}} />} onClick={() => onLikeIconClickedHandler(false)} />
-                :
-                <HoverIcon icon={<FavoriteBorderIcon fontSize='small' sx={{ color: theme.palette.white}}/>} onClick={() => onLikeIconClickedHandler(true)} />
-                }
-                <span>{likeCount}</span>
+        <ListItem sx={{display: 'flex', alignItems: 'center'}}>
+            <Box sx={{display: 'flex'}}>
+                <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column', marginRight: '10px'}}>
+                    { liked ?
+                    <HoverIcon icon={<FavoriteIcon fontSize='small' sx={{ color: 'red'}} />} onClick={() => onLikeIconClickedHandler(false)} />
+                    :
+                    <HoverIcon icon={<FavoriteBorderIcon fontSize='small' sx={{ color: theme.palette.white}}/>} onClick={() => onLikeIconClickedHandler(true)} />
+                    }
+                    <span>{likeCount}</span>
+                </Box>
+                <ListItemText
+                    secondaryTypographyProps={{color: theme.palette.white}}
+                    primary={post.content}
+                    secondary={post.team.name + " - \n" + timeSince}
+                />
             </Box>
-            <ListItemText
-                secondaryTypographyProps={{color: theme.palette.white}}
-                primary={post.content}
-                secondary={post.team.name + " - \n" + timeSince}
-            />
+            {session && session.user.id == post.team.ownerId && 
+                <Box sx={{ml: 2}}>
+                    <HoverIcon icon={<DeleteIcon color='error'/>} onClick={deleteIconClickedHandler}/>
+                </Box>
+            }
         </ListItem>
     )}

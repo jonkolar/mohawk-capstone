@@ -166,6 +166,16 @@ export async function createTeamPost(db, teamId, content) {
     return newPost;
 }
 
+export async function deleteTeamPost(db, postId) {
+  const deletedPost = await db.post.delete({
+      where: {
+        id: postId
+      }
+    })
+
+  return deletedPost;
+}
+
 export async function createTeamPostLike(db, postId, userId) {
     const newPostLike = await db.postLike.create({
         data: {

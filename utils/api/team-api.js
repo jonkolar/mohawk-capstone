@@ -72,6 +72,17 @@ export async function createPostCall(teamId, content) {
     }
 }
 
+export async function deletePostCall(postId) {
+    try {
+        const response = await apiClient.post("/team/post/delete", {
+            postId: postId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
 export async function retrieveTeamPostListCall(teamId, cursor=null) {
     try {
         const response = await apiClient.post("/team/post/list", {
