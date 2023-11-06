@@ -68,7 +68,11 @@ export async function getServerSideProps(context) {
             userId: session.user.id
         },
         include: {
-            team: true
+            team: {
+                include: {
+                    game: true
+                }
+            }
         }
     })
 

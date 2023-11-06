@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material"
 
 export default function IconList ({ items }) {
-    console.log(items)
     return (
         <ul>
             {items.map(i => {
