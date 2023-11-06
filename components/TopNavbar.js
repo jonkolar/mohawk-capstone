@@ -15,7 +15,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import SearchIcon from '@mui/icons-material/Search';
 
 function TopNavbar() {
@@ -77,9 +76,8 @@ function TopNavbar() {
             >
             </IconButton>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
-            variant="h5"
+            variant="p"
             noWrap
             component="a"
             href=""
@@ -94,7 +92,7 @@ function TopNavbar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            ESPORTS TEAM MANAGER
           </Typography>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'end', marginRight: 1 }}>
               <Link href={"/search"}>
