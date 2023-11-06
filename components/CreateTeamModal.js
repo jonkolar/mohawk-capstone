@@ -25,9 +25,8 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
         await createTeamCall(user.email, name, gameId, description)
             .then(response => {
                 if (response) {
-                    console.log(response)
                     setModal(false)
-                    location.reload()
+                    location.replace("/teams/" + response.id)
                 } else {
                     console.log('something went wrong')
                 }

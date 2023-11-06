@@ -13,13 +13,12 @@ export default async function CreateTeamHandler(req, res) {
   }
 
   // retrieve payload parameters
-  let email = req.body.email
   let name = req.body.name
   let gameId = req.body.gameId
   let description = req.body.description
 
   // create team
-  const newTeam = createTeam(db, sessionUser.id, name, gameId, description)
+  const newTeam = await createTeam(db, sessionUser.id, name, gameId, description)
 
   // return success if new team created
   if (newTeam) {
