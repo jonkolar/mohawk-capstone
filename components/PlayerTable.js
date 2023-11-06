@@ -42,7 +42,7 @@ export default function PlayerTable({ user, team, isOwner }) {
 
     useEffect(() => {
       async function retrieveAliases() {
-          await userRetrieveAllAliasCall(player.user.id)
+          await userRetrieveAllAliasCall(player.user.id, team.game.id)
               .then(data => {
                   setAliasList(data.aliases)
               })

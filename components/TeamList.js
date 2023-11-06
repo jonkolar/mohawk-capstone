@@ -28,7 +28,7 @@ const TeamListItem = forwardRef(({ user, team, onClick, href, viewOnly=false }, 
                     <WorkspacesIcon color='primary' />
                 </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={team.name} secondary={team.description} secondaryTypographyProps={{color: theme.palette.white}}/>
+                <ListItemText primary={team.name} secondary={team.game.name} secondaryTypographyProps={{color: theme.palette.white}}/>
                 { isOwner && 
                     <Box sx={{ ml: 5 }}>
                         <StarsIcon />

@@ -59,10 +59,11 @@ export async function userDeleteAliasCall(aliasId) {
     }
 }
 
-export async function userRetrieveAllAliasCall(userId) {
+export async function userRetrieveAllAliasCall(userId, gameId = null) {
     try {
         const response = await apiClient.post("/user/alias/all", {
-            userId: userId
+            userId: userId,
+            gameId: gameId
         })
         return response.data
     } catch (error) {

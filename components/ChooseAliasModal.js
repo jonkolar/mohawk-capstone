@@ -1,30 +1,13 @@
 import { useState, useEffect } from "react";
 
 import { userRetrieveAllAliasCall, userAcceptTeamInviteCall } from "@/utils/api/user-api";
+import BasicModal from "./BasicModal";
 
-import Box from '@mui/material/Box';
+import { Typography } from "@mui/material";
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 5,
-    //
-    display: 'flex',
-    justifyContent: 'center',
-};
 
 export default function ChooseAliasModal({ open, setModal, user, invite }) {
     const [aliasId, setAliasId] = useState("");
@@ -32,13 +15,14 @@ export default function ChooseAliasModal({ open, setModal, user, invite }) {
 
     useEffect(() => {
         const retrieveAliases = async () => {
-            const data = await userRetrieveAllAliasCall(user.id);
+            const data = await userRetrieveAllAliasCall(user.id, invite ? invite.team.gameId : null );
             setAliases(data.aliases)
+            setAliasId(data.aliases[0].id)
         }
 
         retrieveAliases()
         .catch(console.error)
-    }, [])
+    }, [invite])
 
     const handleClose = () => {
 
@@ -56,32 +40,32 @@ export default function ChooseAliasModal({ open, setModal, user, invite }) {
 
     return (
         <div>
-            <Modal
+            <BasicModal
+                label="Choose Alias"
                 open={open}
+                setModal={setModal}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    <form method="POST" onSubmit={onSubmit}>
-                        <FormControl>
-                            <Select
-                                labelId="alias-label"
-                                id="alias"
-                                value={aliasId}
-                                onChange={(e) => { setAliasId(e.target.value) }}
-                            >
-                                {aliases.map((alias) =>
-                                    <MenuItem key={alias.id} value={alias.id}>{alias.alias}</MenuItem>
-                                )}
-                            </Select>
+                {aliases.length <= 0 ? <Typography variant="h6">Please add an alias (on your profile page) for the game this team is competing in before accepting this invite.</Typography> 
+                :
+                <form method="POST" onSubmit={onSubmit}>
+                    <FormControl>
+                        <Select
+                            labelId="alias-label"
+                            id="alias"
+                            value={aliasId}
+                            onChange={(e) => { setAliasId(e.target.value) }}
+                        >
+                            {aliases.map((alias) =>
+                                <MenuItem key={alias.id} value={alias.id}>{alias.game.name + ": " + alias.alias}</MenuItem>
+                            )}
+                        </Select>
 
-                            <Button type="submit" variant="contained">Accept</Button>
-                            <Button onClick={() => setModal(false)}>Close</Button>
-                        </FormControl>
-                    </form>
-                </Box>
-            </Modal>
+                        <Button type="submit" variant="contained" sx={{mt: 2}}>Accept</Button>
+                    </FormControl>
+                </form>
+                }
+            </BasicModal>
         </div>
     );
 }

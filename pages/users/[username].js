@@ -75,7 +75,11 @@ export async function getServerSideProps({ req, res, query }) {
                     game: true
                 }
             },
-            teams: true
+            teams: {
+                include: {
+                    game: true
+                }
+            }
         }
     })
    

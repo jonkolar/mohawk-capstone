@@ -20,6 +20,7 @@ import { Button, Box, Typography } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
 import GroupsIcon from "@mui/icons-material/Groups";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 export default function TeamPage({ team, initialPosts, matches, challenges }) {
     const theme = useTheme();
@@ -133,7 +134,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                     </Box>
 
                     <Box sx={{flex: 1}}>
-                        <BoxLabelIconTopper icon={<ChatBubbleIcon fontSize="small"/>} label="MATCHES"/>
+                        <BoxLabelIconTopper icon={<CalendarTodayIcon fontSize="small"/>} label="MATCHES"/>
                         <Box sx={{backgroundColor: theme.palette.primary.main, padding: 3, borderRadius: theme.border.radius}}>
                             <MatchList matches={matches}/>
                         </Box>

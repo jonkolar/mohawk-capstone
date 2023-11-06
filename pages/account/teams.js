@@ -57,6 +57,9 @@ export async function getServerSideProps(context) {
     const teams = await db.team.findMany({
        where: {
         ownerId: session.user.id
+       },
+       include: {
+        game: true
        }
     })
 
