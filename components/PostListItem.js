@@ -23,6 +23,9 @@ export default function PostListItem ({ post }) {
     const timeSince = moment(post.date).fromNow();
 
     const onLikeIconClickedHandler = async (liked) => {
+        if (!session)
+            return;
+
         if (liked) {
             await createPostLikeCall(post.id)
             .then((data) => {
