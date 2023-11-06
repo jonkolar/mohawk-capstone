@@ -1,29 +1,12 @@
 import { useState } from "react";
-import moment from "moment";
 
+import BasicModal from "./BasicModal";
 import { sendTeamMatchChallengeCall } from "@/utils/api/team-api";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 5,
-    //
-    display: 'flex',
-    justifyContent: 'center',
-};
 
 export default function CreateMatchModal({ team, open, setModal }) {
     const [teamId, setTeamId] = useState('');
@@ -50,29 +33,25 @@ export default function CreateMatchModal({ team, open, setModal }) {
 
     return (
         <div>
-            <Modal
+            <BasicModal
+                label="Send Challenge"
                 open={open}
+                setModal={setModal}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-
-                    <form method="POST" onSubmit={handleSubmit}>
-                        <FormControl>
-                            <TextField id="team-id" label="Team Id" variant="outlined" onChange={(e) => setTeamId(e.target.value)} value={teamId} required/>
-                            <input
-                                type="date"
-                                onChange={(e) => setDate(e.target.value)}
-                                required
-                            />
-                            <Button type="submit" variant="contained">Send</Button>
-                            <Button onClick={() => setModal(false)}>Close</Button>
-                        </FormControl>
-                    </form>
-
-                </Box>
-            </Modal>
+                <form method="POST" onSubmit={handleSubmit}>
+                    <FormControl>
+                        <TextField id="team-id" label="Team Id" variant="outlined" onChange={(e) => setTeamId(e.target.value)} value={teamId} required/>
+                        <input
+                            type="date"
+                            onChange={(e) => setDate(e.target.value)}
+                            required
+                        />
+                        <Button type="submit" variant="contained">Send</Button>
+                        <Button onClick={() => setModal(false)}>Close</Button>
+                    </FormControl>
+                </form>
+            </BasicModal>
         </div>
     );
 }

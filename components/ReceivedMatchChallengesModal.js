@@ -1,37 +1,17 @@
-import { useState } from "react";
 import moment from "moment";
 
 import { acceptTeamMatchChallengeCall, ignoreTeamMatchChallengeCall } from "@/utils/api/team-api";
+import BasicModal from "./BasicModal";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from "@mui/material";
+import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography } from "@mui/material";
 import CarpenterIcon from '@mui/icons-material/Carpenter';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 5,
-    //
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-};
 
 export default function ReceivedMatchChallengesModal({ challenges = [], open, setModal }) {
     const handleClose = () => {
 
     }
-
-    console.log(challenges)
 
     const handleAnswerChallenge = async (challenge, answer) => {
 
@@ -58,13 +38,14 @@ export default function ReceivedMatchChallengesModal({ challenges = [], open, se
 
     return (
         <div>
-            <Modal
+            <BasicModal
+                label="Challenges"
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+                setModal={setModal}
             >
-                <Box sx={style}>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                    {challenges.length <= 0 && <Typography variant="h5">No Challenges...</Typography>}
                     <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
                         {challenges.map(challenge => {
                             const date = moment(challenge.date).format("MMM Do YYYY")
@@ -89,7 +70,7 @@ export default function ReceivedMatchChallengesModal({ challenges = [], open, se
                     </List>
                     <Button onClick={() => setModal(false)}>Close</Button>
                 </Box>
-            </Modal>
+            </BasicModal>
         </div>
     );
 }

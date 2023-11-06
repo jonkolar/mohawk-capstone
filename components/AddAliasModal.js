@@ -3,29 +3,13 @@ import { useState, useEffect } from "react";
 import { retrieveGamesCall } from "@/utils/api/data-api";
 import { userAddAliasCall } from "@/utils/api/user-api";
 
-import Box from '@mui/material/Box';
+import BasicModal from "./BasicModal";
+
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 5,
-    //
-    display: 'flex',
-    justifyContent: 'center',
-};
 
 export default function AddAliasModal({ open, setModal, user }) {
     const [games, setGames] = useState([])
@@ -62,34 +46,34 @@ export default function AddAliasModal({ open, setModal, user }) {
 
     return (
         <div>
-            <Modal
+            <BasicModal
+                label="Add Alias"
+                setModal={setModal}
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    <form method="POST" onSubmit={onSubmit}>
-                        <FormControl>
-                            <Select
-                                labelId="team-game-label"
-                                id="team-game"
-                                value={gameId}
-                                onChange={(e) => { setGameId(e.target.value) }}
-                            >
-                                {games.map((game) =>
-                                    <MenuItem key={game.id} value={game.id}>{game.name}</MenuItem>
-                                )}
-                            </Select>
+                <form method="POST" onSubmit={onSubmit}>
+                    <FormControl>
+                        <Select
+                            labelId="team-game-label"
+                            id="team-game"
+                            value={gameId}
+                            onChange={(e) => { setGameId(e.target.value) }}
+                        >
+                            {games.map((game) =>
+                                <MenuItem key={game.id} value={game.id}>{game.name}</MenuItem>
+                            )}
+                        </Select>
 
-                            <TextField id="alias" label="Alias" variant="outlined" onChange={(e) => setAlias(e.target.value)} value={alias} />
+                        <TextField id="alias" label="Alias" variant="outlined" onChange={(e) => setAlias(e.target.value)} value={alias} />
 
-                            <Button type="submit" variant="contained">Add</Button>
-                            <Button onClick={() => setModal(false)}>Close</Button>
-                        </FormControl>
-                    </form>
-                </Box>
-            </Modal>
+                        <Button type="submit" variant="contained">Add</Button>
+                        <Button onClick={() => setModal(false)}>Close</Button>
+                    </FormControl>
+                </form>
+            </BasicModal>
         </div>
     );
 }

@@ -35,15 +35,13 @@ export default function MatchPage({ match }) {
     
     const theme = useTheme();
 
-    const isTeamOwner = session ? match.team1.ownerId == session.user.id || match.team2.ownerId == session.user.id : false
-
-    console.log(match)
+    const isTeamOwner = session && match ? match.team1.ownerId == session.user.id || match.team2.ownerId == session.user.id : false
 
     const onCancelMatchClickedHandler = async () => {
         await cancelTeamMatchCall(match.id)
             .then(data =>{
                 if (data) {
-                    location.reload();
+                    location.replace("/");
                 } else {
                     console.log("An error as occured")
                 }
