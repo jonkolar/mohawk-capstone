@@ -105,7 +105,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                     <Typography variant="h3" color={theme.palette.white}>{team.name}</Typography>
                     <Typography color={theme.palette.white}>Description: {team.description}</Typography>
                     <Typography color={theme.palette.white}>Game: {team.game.name}</Typography>
-                    <Typography color={theme.palette.white}>Id: {team.game.id}</Typography>
+                    <Typography color={theme.palette.white}>Id: {team.id}</Typography>
                 </Box>
             </Box>
 
