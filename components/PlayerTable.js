@@ -83,9 +83,9 @@ export default function PlayerTable({ user, team, isOwner }) {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 655 }} size="small" aria-label="player table">
-        <TableHead sx={{ backgroundColor: theme.palette.primary.main}}>
+    <TableContainer component={Paper} sx={{width: '100%'}}>
+      <Table sx={{  }} size="small" aria-label="player table">
+        <TableHead sx={{ backgroundColor: theme.palette.primary.main }}>
           <TableRow>
             <TableCell sx={{ color: theme.palette.white }}>Account</TableCell>
             <TableCell sx={{ color: theme.palette.white }}align="right">Alias</TableCell>

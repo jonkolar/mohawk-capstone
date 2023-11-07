@@ -116,7 +116,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                         <Button variant="contained" onClick={() => setShowInvitePlayerModal(true)} sx={{ marginTop: 1 }}>Invite Player</Button> }
                 </Box>
 
-                <Box sx={{display: 'flex', gap: 3, width: '100%'}}>
+                <Box sx={{display: 'flex', gap: 3, flex: 1, flexDirection: { md: 'row', xs: 'column'}}}>
                     <Box sx={{ flex: 1}}>
                         <BoxLabelIconTopper icon={<ChatBubbleIcon fontSize="small"/>} label="POSTS"/>
                         <Box sx={{backgroundColor: theme.palette.primary.main, padding: 1, borderRadius: theme.border.radius, display: 'flex'}}>
@@ -140,8 +140,8 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                         </Box>
                         {isOwner &&
                             <Box sx={{display: 'flex', justifyContent: 'space-between', marginTop: 1}}>
-                                <Button variant="contained" onClick={() => setShowSendMatchChallengeModal(true)}>Send Challenge</Button>
-                                <Button variant="contained" onClick={() => setShowReceivedChallengesModal(true)}>View Challenges</Button>
+                                <Button variant="contained" onClick={() => setShowSendMatchChallengeModal(true)}>CHALLENGE</Button>
+                                <Button variant="contained" onClick={() => setShowReceivedChallengesModal(true)}>RECEIVED</Button>
                             </Box>
                         }
                     </Box>
