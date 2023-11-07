@@ -1,5 +1,4 @@
 import { db } from "@/utils/db-server"
-import { getUserServerSession } from "@/utils/userServerSession";
 
 export default async function searchUsersHandler(req, res) {
   // only allow POST requests
@@ -33,7 +32,8 @@ export default async function searchUsersHandler(req, res) {
         take: 3,
         where: {
             username: {
-                contains: search
+                contains: search,
+                mode: 'insensitive'
             }
         },
         orderBy: {

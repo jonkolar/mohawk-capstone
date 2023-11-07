@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 
 import Link from "@/components/Link";
 import PostList from "@/components/PostList";
+import TeamList from "@/components/TeamList";
 
 import { useTheme } from "@mui/styles";
 import { TextField, InputAdornment, Button, Typography } from "@mui/material"
@@ -198,9 +199,7 @@ export default function Search({  }) {
                     <Typography variant="h6" color={theme.palette.white} sx={{marginBottom: 3}}>Team Results:</Typography>
                     <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         {results.teams.length <= 0 && <Typography variant="h5" color={theme.palette.white}>No results...</Typography>}
-                        {results.teams.map(team => <Link href={"/teams/" + team.id} key={team.id}>
-                                                      <Typography variant="h5" key={team.id} color={theme.palette.white}>{team.name}</Typography>
-                                                   </Link>)}
+                        {results.teams.length > 0 && <TeamList teams={results.teams} />}
                         {!resultsDoneFlags.teams && <Button variant="contained" sx={{marginTop: 3}} onClick={() => onShowMoreTeamsButtonClicked()}>Show More</Button>}
                     </Box>
                 </TabPanel>

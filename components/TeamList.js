@@ -13,7 +13,7 @@ import StarsIcon from '@mui/icons-material/Stars';
 
 import Link from './Link';
 
-const TeamListItem = forwardRef(({ user, team, onClick, href, viewOnly=false }, ref) => {
+const TeamListItem = forwardRef(({ user, team, onClick, href }, ref) => {
     const { data: session } = useSession()
     const theme = useTheme();
     const isOwner = session ? session.user.id == team.ownerId : false

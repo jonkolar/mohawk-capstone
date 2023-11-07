@@ -1,5 +1,4 @@
 import { db } from "@/utils/db-server"
-import { getUserServerSession } from "@/utils/userServerSession";
 
 export default async function searchTeamsHandler(req, res) {
   // only allow POST requests
@@ -26,6 +25,9 @@ export default async function searchTeamsHandler(req, res) {
         },
         orderBy: {
             name: 'asc'
+        },
+        include: {
+            game: true
         }
     })
   } else {
@@ -33,11 +35,15 @@ export default async function searchTeamsHandler(req, res) {
         take: 3,
         where: {
             name: {
-                contains: search
+                contains: search,
+                mode: 'insensitive'
             }
         },
         orderBy: {
             name: 'asc'
+        },
+        include: {
+            game: true
         }
     })
   }

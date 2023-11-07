@@ -37,7 +37,8 @@ export default async function searchPostsHandler(req, res) {
         take: 3,
         where: {
             content: {
-                contains: search
+                contains: search,
+                mode: 'insensitive'
             }
         },
         include: {
