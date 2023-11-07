@@ -103,8 +103,9 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                 <Box sx={{ display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.primary.main, 
                         borderRadius: theme.border.radius, gap: 1, padding: 3, marginTop: 0.2}}>
                     <Typography variant="h3" color={theme.palette.white}>{team.name}</Typography>
-                    <Typography variant="p" color={theme.palette.white}>Game: {team.game.name}</Typography>
-                    <Typography variant="p" color={theme.palette.white}>Description: {team.description}</Typography>
+                    <Typography color={theme.palette.white}>Description: {team.description}</Typography>
+                    <Typography color={theme.palette.white}>Game: {team.game.name}</Typography>
+                    <Typography color={theme.palette.white}>Id: {team.game.id}</Typography>
                 </Box>
             </Box>
 
@@ -121,7 +122,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                         <BoxLabelIconTopper icon={<ChatBubbleIcon fontSize="small"/>} label="POSTS"/>
                         <Box sx={{backgroundColor: theme.palette.primary.main, padding: 1, borderRadius: theme.border.radius, display: 'flex'}}>
                             { posts.slice(postsOffset, postsOffset + postsToDisplay).length <= 0 && 
-                                <Typography sx={{color: theme.palette.white, marginLeft: 1}}>No posts...</Typography>}
+                                <Typography sx={{color: theme.palette.white, marginLeft: 1, m: 2}}>No posts...</Typography>}
                             <PostList posts={posts.slice(postsOffset, postsOffset + postsToDisplay)}/>
                         </Box>
                         <Box sx={{display: 'flex', gap: 1, marginTop: 1, justifyContent: 'space-between'}}>
