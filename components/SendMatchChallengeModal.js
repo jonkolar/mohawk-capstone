@@ -34,7 +34,6 @@ export default function CreateMatchModal({ team, open, setModal }) {
         await sendTeamMatchChallengeCall(team.id, parseInt(teamId), date)
             .then(data => {
                 if (data) {
-                    console.log(data)
                     setModal(false)
                     location.reload()
                 } else {
@@ -53,7 +52,8 @@ export default function CreateMatchModal({ team, open, setModal }) {
             >
                 <form method="POST" onSubmit={handleSubmit}>
                     <FormControl sx={{display: 'flex', gap: 2}}>
-                        <TextField id="team-id" label="Team Id" type="number" variant="outlined" onChange={onTeamIdChangedHandler} value={teamId} required/>
+                        <TextField id="team-id" label="Team Id" type="number" variant="outlined" color={!teamExists || team.id == teamId ? "error" : "success"}
+                            onChange={onTeamIdChangedHandler} value={teamId} required/>
                         <Box sx={{display: 'flex', flexDirection: 'row'}}>
                             <Typography variant="h6" sx={{mr: 1}}>Date:</Typography>
                             <input
