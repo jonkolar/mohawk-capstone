@@ -189,7 +189,7 @@ export async function getServerSideProps(context) {
 
     // Fill in missing months of the year
     let distinctYears = []
-    signupsByMonth.forEach(su => !(su.year in distinctYears) && distinctYears.push(su.year))
+    signupsByMonth.forEach(su => !(distinctYears.findIndex(y => y == su.year) && distinctYears.push(su.year)));
     let signupData = []
     distinctYears.forEach(year => {
         for (let i = 0; i < 12; i++) {
@@ -223,9 +223,6 @@ export async function getServerSideProps(context) {
     data['postCount'] = await db.post.count()
 
     data['matchCount'] = await db.match.count()
-
-    console.log(data)
-
 
     return {
         props: { user: session.user, data: data },
