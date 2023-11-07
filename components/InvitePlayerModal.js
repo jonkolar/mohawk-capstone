@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import BasicModal from "./BasicModal";
-import { checkUsernameExistsCall } from "@/utils/api/user-api";
+import { checkUserExistsCall } from "@/utils/api/user-api";
 
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -23,12 +23,9 @@ export default function InvitePlayerModal({ team, open, setModal, invitePlayerHa
         const userOnTeamCheck = team.players.some(p => p.user.username == e.target.value);
         setUserOnTeam(userOnTeamCheck);
 
-        await checkUsernameExistsCall(e.target.value)
-        .then(({ available }) => {
-            if (!available)
-                setExists(true);
-            else
-                setExists(false);
+        await checkUserExistsCall(e.target.value)
+        .then(({ exists }) => {
+            setExists(exists);
         })
     }
 

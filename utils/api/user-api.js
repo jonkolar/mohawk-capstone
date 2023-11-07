@@ -11,6 +11,17 @@ export async function checkUsernameExistsCall(username) {
     }
 }
 
+export async function checkUserExistsCall(username) {
+    try {
+        const response = await apiClient.post("/user/exists", {
+            username: username
+        })
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
 export async function updateUserCall(email, updateData) {
     try {
         const response = await apiClient.post("/user/update-user", {
