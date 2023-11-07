@@ -55,7 +55,7 @@ export default function AddAliasModal({ open, setModal, user }) {
                 aria-describedby="modal-modal-description"
             >
                 <form method="POST" onSubmit={onSubmit}>
-                    <FormControl>
+                    <FormControl sx={{display: 'flex', gap: 2}}>
                         <Select
                             labelId="team-game-label"
                             id="team-game"
@@ -67,10 +67,10 @@ export default function AddAliasModal({ open, setModal, user }) {
                             )}
                         </Select>
 
-                        <TextField id="alias" label="Alias" variant="outlined" onChange={(e) => setAlias(e.target.value)} value={alias} />
+                        <TextField id="alias" label="Alias" variant="outlined" required={true}
+                            onChange={(e) => setAlias(e.target.value)} value={alias} />
 
                         <Button type="submit" variant="contained">Add</Button>
-                        <Button onClick={() => setModal(false)}>Close</Button>
                     </FormControl>
                 </form>
             </BasicModal>

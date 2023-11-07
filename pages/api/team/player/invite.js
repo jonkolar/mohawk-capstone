@@ -20,6 +20,10 @@ export default async function InvitePlayerHandler(req, res) {
   // find user by username
   const user = await getUser(db, { username: username })
 
+  // user didn't exist
+  if (!user)
+    return res.status(200).json({result: 'user does not exist'})
+
     // check if invite already exists
   const inviteExists = await db.teamInvite.findFirst({
     where: {
@@ -56,6 +60,6 @@ export default async function InvitePlayerHandler(req, res) {
 
   // if invite created return success
   if (invite) {
-    return res.status(200).json({result: !invite ? 'invite failed' : 'success'})
+    return res.status(200).json({result: !invite ? 'failed' : 'success'})
   }
 }

@@ -14,9 +14,7 @@ export default async function CheckUsernameHandler(req, res) {
       username: username
   })
 
-console.log(user)
-
-  if (user || username.length <= 3)
+  if (user)
     available = false
 
   // return success if queries were successful

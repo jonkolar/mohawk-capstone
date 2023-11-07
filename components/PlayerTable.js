@@ -109,7 +109,7 @@ export default function PlayerTable({ user, team, isOwner }) {
                   <PlayerAliasDropdown player={player}/>
                   :
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
-                      <p>{player.alias.alias}</p>
+                      <Typography >{player.alias.alias}</Typography>
                       {(user && user.id == player.user.id || isOwner) &&
                       <>
                         <HoverIcon icon={<EditIcon />} onClick={() => { setEditPlayerAliasId(player.id); setEditPlayerAlias(true); }} />

@@ -42,10 +42,9 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
                 onClose={handleClose}
             >
                 <form method="POST" onSubmit={handleSubmit}>
-                    <FormControl>
-                        <TextField id="team-name" label="Name" variant="outlined" onChange={(e) => setName(e.target.value)} value={name} />
-
-                        <br /><br />
+                    <FormControl sx={{display: 'flex', gap: 2}}>
+                        <TextField id="team-name" label="Name" variant="outlined" required={true}
+                            onChange={(e) => setName(e.target.value)} value={name}/>
 
                         <Select
                             labelId="team-game-label"
@@ -58,14 +57,11 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
                             )}
                         </Select>
 
-                        <br /><br />
+                        <TextField id="team-description" label="Description" variant="outlined" required={true}
+                            onChange={(e) => setDescription(e.target.value)} value={description} />
 
-                        <TextField id="team-description" label="Description" variant="outlined" onChange={(e) => setDescription(e.target.value)} value={description} />
-
-                        <br /><br />
 
                         <Button type="submit" variant="contained">Submit</Button>
-                        <Button onClick={() => setModal(false)}>Close</Button>
 
                     </FormControl>
                 </form>
