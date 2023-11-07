@@ -9,8 +9,8 @@ const MatchListItem = forwardRef(({ match, onClick, href }, ref) => {
   const date = moment(match.date).format("MMM Do YYYY")
   return (
       <a href={href} onClick={onClick} ref={ref} style={{textDecoration: 'none', color: 'inherit'}}>
-          <div>{match.team1.name} vs {match.team2.name}</div>
-          <div>{date}</div>
+          <Typography fontSize={18}>{match.team1.name} vs {match.team2.name}</Typography>
+          <Typography fontSize={12}>{date}</Typography>
       </a>
   )
 })
@@ -20,7 +20,7 @@ export default function MatchList( { matches }) {
   const theme = useTheme();
 
   return (
-    <Box sx={{color: theme.palette.white}}>
+    <Box sx={{color: theme.palette.white, display: 'flex', flexDirection: 'column', gap: 1}}>
         {matches.length <= 0 && <Typography>No matches...</Typography>}
         {matches.map(match =>
             <Link key={match.id} useFunctionalComponent={true} href={"/matches/" + match.id}>

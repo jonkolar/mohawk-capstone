@@ -1,5 +1,16 @@
 import { apiClient } from "./base"
 
+export async function teamExistsCall(teamId) {
+    try {
+        const response = await apiClient.post("/team/exists", {
+            teamId: teamId
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
 export async function createTeamCall(email, name, gameId, description) {
     try {
         const response = await apiClient.post("/team/create", {

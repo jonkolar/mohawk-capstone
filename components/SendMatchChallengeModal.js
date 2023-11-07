@@ -1,19 +1,31 @@
 import { useState } from "react";
 
 import BasicModal from "./BasicModal";
-import { sendTeamMatchChallengeCall } from "@/utils/api/team-api";
+import { teamExistsCall, sendTeamMatchChallengeCall } from "@/utils/api/team-api";
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
+import { Typography, Box, Button, FormControl, TextField } from "@mui/material";
 
 export default function CreateMatchModal({ team, open, setModal }) {
     const [teamId, setTeamId] = useState('');
     const [date, setDate] = useState(null);
+    const [teamExists, setTeamExists] = useState(false);
 
     const handleClose = () => {
 
+    }
+
+    const onTeamIdChangedHandler = async (e) => {
+        setTeamId(e.target.value)
+
+        if (e.target.value == '' || e.target.value == team.id) {
+            setTeamExists(false);
+            return;
+        }
+
+        await teamExistsCall(e.target.value)
+        .then(({ exists }) => {
+            setTeamExists(exists);
+        })
     }
 
     const handleSubmit = async (e) => {
@@ -40,15 +52,19 @@ export default function CreateMatchModal({ team, open, setModal }) {
                 onClose={handleClose}
             >
                 <form method="POST" onSubmit={handleSubmit}>
-                    <FormControl>
-                        <TextField id="team-id" label="Team Id" variant="outlined" onChange={(e) => setTeamId(e.target.value)} value={teamId} required/>
-                        <input
-                            type="date"
-                            onChange={(e) => setDate(e.target.value)}
-                            required
-                        />
-                        <Button type="submit" variant="contained">Send</Button>
-                        <Button onClick={() => setModal(false)}>Close</Button>
+                    <FormControl sx={{display: 'flex', gap: 2}}>
+                        <TextField id="team-id" label="Team Id" type="number" variant="outlined" onChange={onTeamIdChangedHandler} value={teamId} required/>
+                        <Box sx={{display: 'flex', flexDirection: 'row'}}>
+                            <Typography variant="h6" sx={{mr: 1}}>Date:</Typography>
+                            <input
+                                style={{width: '100%'}}
+                                type="date"
+                                onChange={(e) => setDate(e.target.value)}
+                                required
+                            />
+                        </Box>
+                        <Typography textAlign="center" variant="h6">{teamExists ? "Found Team!" : team.id == teamId ? "Can't challenge self" : "Team doesn't exist"}</Typography>
+                        <Button type="submit" variant="contained" disabled={!teamExists}>Send</Button>
                     </FormControl>
                 </form>
             </BasicModal>
