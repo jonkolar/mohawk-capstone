@@ -45,8 +45,6 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
     const onInvitePlayerHandler = async (username) => {
         await invitePlayerCall(username, team.id)
             .then(data => {
-                console.log(data)
-                toast.success(username + " Invited!");
                 setShowInvitePlayerModal(false);
             })
     }
