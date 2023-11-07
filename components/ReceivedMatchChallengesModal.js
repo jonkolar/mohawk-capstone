@@ -68,7 +68,6 @@ export default function ReceivedMatchChallengesModal({ challenges = [], open, se
                             )
                         })}
                     </List>
-                    <Button onClick={() => setModal(false)}>Close</Button>
                 </Box>
             </BasicModal>
         </div>
