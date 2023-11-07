@@ -55,7 +55,7 @@ export default function PostListItem ({ post }) {
     return (
         <ListItem sx={{display: 'flex', alignItems: 'center'}}>
             <Box sx={{display: 'flex'}}>
-                <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column', marginRight: '10px'}}>
+                <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginRight: '10px'}}>
                     { liked ?
                     <HoverIcon icon={<FavoriteIcon fontSize='small' sx={{ color: 'red'}} />} onClick={() => onLikeIconClickedHandler(false)} />
                     :
