@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { db } from "@/utils/db-server";
 
+// /api/auth/...
 export const authOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(db),

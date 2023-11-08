@@ -1,6 +1,6 @@
 import { db } from "@/utils/db-server"
-import { getUserServerSession } from "@/utils/userServerSession";
 
+// /api/search/posts
 export default async function searchPostsHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

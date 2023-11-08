@@ -1,6 +1,7 @@
 import { db } from "@/utils/db-server"
 import { getUserServerSession } from "@/utils/userServerSession"
 
+// /api/data/user-count
 export default async function DataUserCountHandler(req, res) {
   // only accept GET requests
   if (req.method !== 'GET') return res.status(404).json({Error: "Invalid Request"})

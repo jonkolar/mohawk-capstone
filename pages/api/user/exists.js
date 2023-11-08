@@ -1,6 +1,7 @@
 import { db } from "@/utils/db-server"
 import { getUser } from "@/utils/services/user-service";
 
+// /api/user/exists
 export default async function UserExistsHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

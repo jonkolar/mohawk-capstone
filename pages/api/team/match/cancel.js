@@ -2,6 +2,7 @@ import { db } from "@/utils/db-server"
 import { getUserServerSession } from "@/utils/userServerSession";
 import { getTeamMatch, deleteTeamMatch } from "@/utils/services/team-service";
 
+// /api/team/match/cancel
 export default async function CancelMatchHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

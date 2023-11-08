@@ -2,6 +2,7 @@ import { db } from "@/utils/db-server"
 import { getUserServerSession } from "@/utils/userServerSession";
 import { deleteTeamMatchChallenge } from "@/utils/services/team-service";
 
+// /api/team/match/ignore
 export default async function IgnoreMatchChallengeHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

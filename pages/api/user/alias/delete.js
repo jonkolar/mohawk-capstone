@@ -2,7 +2,7 @@ import { db } from "@/utils/db-server"
 import { deleteUserAlias } from "@/utils/services/user-service";
 import { getUserServerSession } from "@/utils/userServerSession";
 
-// api/user/alias/delete
+// /api/user/alias/delete
 export default async (req, res) => {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

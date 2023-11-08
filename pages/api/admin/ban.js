@@ -1,7 +1,7 @@
 import { db } from "@/utils/db-server"
-
 import { getUserServerSession } from "@/utils/userServerSession";
 
+// /api/admin/ban
 export default async function AdminBanHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

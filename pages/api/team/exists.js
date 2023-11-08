@@ -1,6 +1,7 @@
 import { db } from "@/utils/db-server"
 import { getTeam } from "@/utils/services/team-service";
 
+// /api/team/exists
 export default async function TeamExistsHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

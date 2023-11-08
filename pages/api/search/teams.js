@@ -1,5 +1,6 @@
 import { db } from "@/utils/db-server"
 
+// /api/search/teams
 export default async function searchTeamsHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

@@ -1,5 +1,6 @@
 import { db } from "@/utils/db-server"
 
+// /api/user/alias/all
 export default async (req, res) => {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

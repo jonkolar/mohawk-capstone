@@ -1,6 +1,7 @@
 import { db } from "@/utils/db-server"
 import { getUserServerSession } from "@/utils/userServerSession";
 
+// /api/user/update-user
 export default async function UpdateUserHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})

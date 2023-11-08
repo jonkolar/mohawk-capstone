@@ -3,6 +3,7 @@ import { getUser } from "@/utils/services/user-service";
 import { getUserServerSession } from "@/utils/userServerSession";
 import { createTeamPlayerInvite } from "@/utils/services/team-service";
 
+// /api/team/player/invite
 export default async function InvitePlayerHandler(req, res) {
   // only allow POST requests
   if (req.method !== 'POST') return res.status(404).json({Error: "Invalid Request"})
