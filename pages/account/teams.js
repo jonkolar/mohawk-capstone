@@ -55,32 +55,18 @@ export async function getServerSideProps(context) {
     const session = await getServerSession(context.req, context.res, authOptions)
 
     const teams = await db.team.findMany({
-       where: {
-        ownerId: session.user.id
-       },
-       include: {
-        game: true
-       }
-    })
-
-    const players = await db.player.findMany({
         where: {
-            userId: session.user.id
-        },
-        include: {
-            team: {
-                include: {
-                    game: true
+            players: {
+                some: {
+                    userId: session.user.id
                 }
             }
-        }
-    })
-
-    players.forEach(player => {
-        if (teams.findIndex(team => {
-            return team.id == player.team.id
-        }) == -1) {
-            teams.push(player.team)
+        },
+        include: {
+            game: true
+        },
+        orderBy: {
+            id: 'asc'
         }
     })
 

@@ -106,6 +106,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                     <Typography color={theme.palette.white}>Description: {team.description}</Typography>
                     <Typography color={theme.palette.white}>Game: {team.game.name}</Typography>
                     <Typography color={theme.palette.white}>Id: {team.id}</Typography>
+                    <Typography color={theme.palette.white}>Owner: {team.owner.username}</Typography>
                 </Box>
             </Box>
 

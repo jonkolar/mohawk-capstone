@@ -65,7 +65,7 @@ export default function PlayerTable({ user, team, isOwner }) {
     }
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"

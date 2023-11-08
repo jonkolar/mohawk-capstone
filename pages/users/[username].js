@@ -16,15 +16,7 @@ import AliasList from "@/components/AliasList";
 import HoverIcon from "@/components/HoverIcon";
 import BoxLabeIconTopper from "@/components/BoxLabelIconTopper";
 
-const useStyles = makeStyles({
-    iconHover: {
-        "&:hover": {
-            cursor: 'pointer'
-        }
-    }
-})
-
-export default function UsersPage({ user }) {
+export default function UsersPage({ user, teams }) {
     const [showAddAliasModal, setShowAddAliasModal] = useState(false)
 
     const { data: session } = useSession()
@@ -52,7 +44,7 @@ export default function UsersPage({ user }) {
 
                 <Box sx={{display: 'flex', flexDirection: 'column'}}>
                     <BoxLabeIconTopper icon={<GroupsIcon />} label="TEAMS"/>
-                    <TeamList teams={user.teams} user={user}/>
+                    <TeamList teams={teams} user={user}/>
                 </Box>
             </Stack>
             <AddAliasModal open={showAddAliasModal} setModal={setShowAddAliasModal}/>
@@ -63,7 +55,7 @@ export default function UsersPage({ user }) {
 
 // This gets called on every request
 export async function getServerSideProps({ req, res, query }) {
-    const username = query.username
+    const username = query.username;
     
     const user = await db.user.findUnique({
         where: {
@@ -75,14 +67,27 @@ export async function getServerSideProps({ req, res, query }) {
                     game: true
                 }
             },
-            teams: {
-                include: {
-                    game: true
-                }
-            }
         }
     })
+
+    const teams = await db.team.findMany({
+        where: {
+            players: {
+                some: {
+                    userId: user.id
+                }
+            }
+        },
+        include: {
+            game: true
+        },
+        orderBy: {
+            id: 'asc'
+        }
+    })
+
+    console.log(teams)
    
     // Pass data to the page via props
-    return { props: { user: JSON.parse(JSON.stringify(user)) } };
+    return { props: { user: JSON.parse(JSON.stringify(user)), teams: teams} };
 }
