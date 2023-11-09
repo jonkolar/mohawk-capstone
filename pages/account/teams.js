@@ -11,9 +11,14 @@ import { Box, Typography } from "@mui/material";
 import Button from '@mui/material/Button';
 import GroupsIcon from '@mui/icons-material/Groups';
 
+// account/teams
+
+// FRONTEND
 export default function AccountTeams({ user, teams, games }) {
+    // states
     const [showCreateTeamModal, setShowCreateTeamModal] = useState(false)
 
+    // delete team button handler
     const onDeleteTeamHandler = async (teamId) => {
         await deleteTeamCall(teamId)
             .then(response => {
@@ -50,10 +55,12 @@ export default function AccountTeams({ user, teams, games }) {
 }
 
 
-// This gets called on every request
+// BACKEND
 export async function getServerSideProps(context) {
+    // get current user session
     const session = await getServerSession(context.req, context.res, authOptions)
 
+    // retrieve user teams
     const teams = await db.team.findMany({
         where: {
             players: {
@@ -70,8 +77,9 @@ export async function getServerSideProps(context) {
         }
     })
 
+    // retrieve all games
     const games = await db.game.findMany()
 
-    // Pass data to the page via props
+    // send data to frontend
     return { props: { user: session.user, teams: teams, games: games } };
 }

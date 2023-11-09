@@ -1,5 +1,6 @@
 import { apiClient } from "./base"
 
+// check if team exists api call
 export async function teamExistsCall(teamId) {
     try {
         const response = await apiClient.post("/team/exists", {
@@ -11,6 +12,7 @@ export async function teamExistsCall(teamId) {
     }
 }
 
+// create team api call
 export async function createTeamCall(email, name, gameId, description) {
     try {
         const response = await apiClient.post("/team/create", {
@@ -25,6 +27,7 @@ export async function createTeamCall(email, name, gameId, description) {
     }
 }
 
+// delete team api call
 export async function deleteTeamCall(teamId) {
     try {
         const response = await apiClient.post("/team/delete", {
@@ -36,6 +39,7 @@ export async function deleteTeamCall(teamId) {
     }
 }
 
+// invite player to team api call
 export async function invitePlayerCall(username, teamId) {
     try {
         const response = await apiClient.post("/team/player/invite", {
@@ -48,6 +52,7 @@ export async function invitePlayerCall(username, teamId) {
     }
 }
 
+// update player alias api call
 export async function updatePlayerAliasCall(playerId, aliasId) {
     try {
         const response = await apiClient.post("/team/player/update-alias", {
@@ -60,6 +65,7 @@ export async function updatePlayerAliasCall(playerId, aliasId) {
     }
 }
 
+// player leave team api call
 export async function playerLeaveTeamCall(playerId) {
     try {
         const response = await apiClient.post("/team/player/leave", {
@@ -71,6 +77,7 @@ export async function playerLeaveTeamCall(playerId) {
     }
 }
 
+// create team post api call
 export async function createPostCall(teamId, content) {
     try {
         const response = await apiClient.post("/team/post/create", {
@@ -83,6 +90,7 @@ export async function createPostCall(teamId, content) {
     }
 }
 
+// delete team post api call
 export async function deletePostCall(postId) {
     try {
         const response = await apiClient.post("/team/post/delete", {
@@ -94,6 +102,7 @@ export async function deletePostCall(postId) {
     }
 }
 
+// retrieve team posts api call (paginated)
 export async function retrieveTeamPostListCall(teamId, cursor=null) {
     try {
         const response = await apiClient.post("/team/post/list", {
@@ -106,6 +115,7 @@ export async function retrieveTeamPostListCall(teamId, cursor=null) {
     }
 }
 
+// like team post api call
 export async function createPostLikeCall(postId) {
     try {
         const response = await apiClient.post("/team/post/like", {
@@ -117,6 +127,7 @@ export async function createPostLikeCall(postId) {
     }
 }
 
+// remove team post api call
 export async function removePostLikeCall(postId) {
     try {
         const response = await apiClient.post("/team/post/dislike", {
@@ -128,6 +139,7 @@ export async function removePostLikeCall(postId) {
     }
 }
 
+// send team match challenge api call
 export async function sendTeamMatchChallengeCall(senderTeamId, receiverTeamId, date) {
     try {
         const response = await apiClient.post("/team/match/send", {
@@ -141,6 +153,7 @@ export async function sendTeamMatchChallengeCall(senderTeamId, receiverTeamId, d
     }
 }
 
+// accept team match challenge api call
 export async function acceptTeamMatchChallengeCall(matchChallengeId, team1Id, team2Id, date) {
     try {
         const response = await apiClient.post("/team/match/accept", {
@@ -155,6 +168,7 @@ export async function acceptTeamMatchChallengeCall(matchChallengeId, team1Id, te
     }
 }
 
+// ignore team match challenge api call
 export async function ignoreTeamMatchChallengeCall(matchChallengeId) {
     try {
         const response = await apiClient.post("/team/match/ignore", {
@@ -166,6 +180,7 @@ export async function ignoreTeamMatchChallengeCall(matchChallengeId) {
     }
 }
 
+// cancel team match api call
 export async function cancelTeamMatchCall(matchId) {
     try {
         const response = await apiClient.post("/team/match/cancel", {

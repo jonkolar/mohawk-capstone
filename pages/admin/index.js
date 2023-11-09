@@ -1,9 +1,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
-
 import { useTheme } from "@mui/styles";
 import moment from "moment";
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 
@@ -17,21 +15,26 @@ import NumbersIcon from '@mui/icons-material/Numbers';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { Box, Typography } from "@mui/material";
 
 const AdminSignupsChart = dynamic(
     () => import('../../components/AdminSignupsChart'),
     { ssr: false, loading: () => <p>Loading...</p> }
   )
-import { Box, Typography } from "@mui/material";
 
+// /admin
+
+// FRONTEND
 export default function Admin({ user, data }) {
     const theme = useTheme();
 
+    // states
     const [banUsername, setBanUsername] = useState("")
     const [unbanUsername, setUnbanUsername] = useState("")
     const [promoteUsername, setPromoteUsername] = useState("")
     const [demoteUsername, setDemoteUsername] = useState("")
 
+    // Ban button submit handler
     const onBanSubmit = async (e) => {
         e.preventDefault()  
         
@@ -45,6 +48,7 @@ export default function Admin({ user, data }) {
         })
     }
 
+    // Unban button submit handler
     const onUnbanSubmit = async (e) => {
         e.preventDefault()
         
@@ -58,6 +62,7 @@ export default function Admin({ user, data }) {
         })
     }
 
+    // Promote to admin submit handler
     const onPromoteSubmit = async (e) => {
         e.preventDefault()  
         
@@ -71,6 +76,7 @@ export default function Admin({ user, data }) {
         })
     }
 
+    // Demote from admin submit handler
     const onDemoteSubmit = async (e) => {
         e.preventDefault()  
         
@@ -160,18 +166,21 @@ export default function Admin({ user, data }) {
     )
 }
 
+// BACKEND
 export async function getServerSideProps(context) {
+    // get user session
     const session = await getServerSession(context.req, context.res, authOptions);
 
+    // if user is not admin then redirect them away
     if (!session || !session.user.admin) {
         return { redirect: { destination: "/" } };
     }
 
+    // prepare data
     let data = {}
 
-    // SIGNUP DATA
 
-    // Query signups by month data from database then downcast (because mysql returns bigint which is not serializable)
+    // Query signups by month data from database then downcast
     const userCreatedQueryResult = await db.$queryRaw`SELECT 
                                                         EXTRACT(MONTH FROM created) AS created_month, 
                                                         EXTRACT(YEAR FROM created) AS created_year,
@@ -209,21 +218,26 @@ export async function getServerSideProps(context) {
     })
     data['signup'] = signupData
 
-    // TOTAL COUNT DATA
+    // user count data
     data['userCount'] = await db.user.count()
 
+    // user ban count data
     data['userBanCount'] = await db.user.count({
         where: {
             banned: true
         }
     })
 
+    // team count data
     data['teamCount'] = await db.team.count()
 
+    // post count data
     data['postCount'] = await db.post.count()
 
+    // match count data
     data['matchCount'] = await db.match.count()
 
+    // send data to frontend
     return {
         props: { user: session.user, data: data },
     }

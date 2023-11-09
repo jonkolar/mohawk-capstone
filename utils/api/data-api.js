@@ -1,6 +1,7 @@
 import { apiClient } from "./base"
 
-export async function retrieveGamesCall(teamId) {
+// retrieve all games api call
+export async function retrieveGamesCall() {
     try {
         const response = await apiClient.get("/data/games");
         return response.data
@@ -9,6 +10,7 @@ export async function retrieveGamesCall(teamId) {
     }
 }
 
+// retrieve user count call
 export async function retrieveUserCountCall() {
     try {
         const response = await apiClient.get("/data/user-count");

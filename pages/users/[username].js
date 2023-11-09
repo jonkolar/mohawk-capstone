@@ -1,25 +1,27 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react"
-import { db } from "@/utils/db-server";
 
+import { db } from "@/utils/db-server";
 import TeamList from "@/components/TeamList";
 import PageNotFound from "@/components/PageNotFound";
-
-import { makeStyles } from "@mui/styles";
-import { Avatar, Stack } from "@mui/material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Box, Typography } from "@mui/material";
-import GroupsIcon from '@mui/icons-material/Groups';
-
 import AddAliasModal from "@/components/AddAliasModal";
 import AliasList from "@/components/AliasList";
 import HoverIcon from "@/components/HoverIcon";
 import BoxLabeIconTopper from "@/components/BoxLabelIconTopper";
 
-export default function UsersPage({ user, teams }) {
-    const [showAddAliasModal, setShowAddAliasModal] = useState(false)
+import { Avatar, Stack } from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Box, Typography } from "@mui/material";
+import GroupsIcon from '@mui/icons-material/Groups';
 
+// /users/[username]
+
+// FRONTEND
+export default function UsersPage({ user, teams }) {
     const { data: session } = useSession()
+
+    // states
+    const [showAddAliasModal, setShowAddAliasModal] = useState(false)
 
     const isOwnProfile = session && user ? session.user.username == user.username : false
 
@@ -53,10 +55,12 @@ export default function UsersPage({ user, teams }) {
 }
 
 
-// This gets called on every request
+// BACKEND
 export async function getServerSideProps({ req, res, query }) {
+    // get query parameters
     const username = query.username;
     
+    // retrieve user information
     const user = await db.user.findUnique({
         where: {
             username: username
@@ -70,6 +74,7 @@ export async function getServerSideProps({ req, res, query }) {
         }
     })
 
+    // retrieve user teams
     const teams = await db.team.findMany({
         where: {
             players: {
@@ -86,8 +91,6 @@ export async function getServerSideProps({ req, res, query }) {
         }
     })
 
-    console.log(teams)
-   
-    // Pass data to the page via props
+    // send data to frontend
     return { props: { user: JSON.parse(JSON.stringify(user)), teams: teams} };
 }

@@ -1,4 +1,6 @@
 // TEAM
+
+// get team from db
 export async function getTeam(db, teamId) {
     const team = await db.team.findUnique({
         where: {
@@ -9,6 +11,7 @@ export async function getTeam(db, teamId) {
       return team;
 }
 
+// create team in db
 export async function createTeam(db, ownerId, name, gameId, description) {
     const newTeam = await db.team.create({
         data: {
@@ -22,6 +25,7 @@ export async function createTeam(db, ownerId, name, gameId, description) {
     return newTeam;
 }
 
+// delete team in db
 export async function deleteTeam(db, teamId) {
     const deletedTeam = await db.team.delete({
         where: {
@@ -34,6 +38,8 @@ export async function deleteTeam(db, teamId) {
 
 
 // MATCH
+
+// get team match from db
 export async function getTeamMatch(db, matchId) {
     const match = await db.match.findUnique({
         where: {
@@ -48,8 +54,9 @@ export async function getTeamMatch(db, matchId) {
     return match;
 }
 
-
 // PLAYER INVITE
+
+// create player invite in db
 export async function createTeamPlayerInvite(db, userId, teamId){
     const newInvite = await db.teamInvite.create({
         data: {
@@ -61,6 +68,7 @@ export async function createTeamPlayerInvite(db, userId, teamId){
     return newInvite;
 }
 
+// delete player invite in db
 export async function deleteTeamPlayerInvite(db, inviteId){
     const deletedTeamInvite = await db.teamInvite.delete({
         where: {
@@ -72,6 +80,8 @@ export async function deleteTeamPlayerInvite(db, inviteId){
 }
 
 // PLAYER
+
+// create player in db
 export async function createTeamPlayer(db, teamId, userId, aliasId) {
     const createdPlayer = await db.player.create({
         data: {
@@ -84,6 +94,7 @@ export async function createTeamPlayer(db, teamId, userId, aliasId) {
     return createdPlayer;
 }
 
+// delete player in db
 export async function deleteTeamPlayer(db, playerId) {
     const deletedPlayer = await db.player.delete({
         where: {
@@ -95,6 +106,8 @@ export async function deleteTeamPlayer(db, playerId) {
 }
 
 // PLAYER ALIAS
+
+// update player alias in db
 export async function updatePlayerAlias(db, playerId, newAliasId) {
     const updatedAlias = await db.player.update({
         where: {
@@ -109,6 +122,8 @@ export async function updatePlayerAlias(db, playerId, newAliasId) {
 }
 
 // MATCH
+
+// create match in db
 export async function createTeamMatch(db, team1Id, team2Id, date) {
     const newMatch = await db.match.create({
         data: {
@@ -121,6 +136,7 @@ export async function createTeamMatch(db, team1Id, team2Id, date) {
     return newMatch;
 }
 
+// delete match in db
 export async function deleteTeamMatch(db, matchId) {
     const deletedMatch = await db.match.delete({
         where: {
@@ -132,6 +148,8 @@ export async function deleteTeamMatch(db, matchId) {
 }
 
 // MATCH CHALLENGE
+
+// create match challenge in db
 export async function createTeamMatchChallenge(db, senderTeamId, receiverTeamId, date) {
     const newMatchChallenge = await db.matchChallenge.create({
         data: {
@@ -144,6 +162,7 @@ export async function createTeamMatchChallenge(db, senderTeamId, receiverTeamId,
     return newMatchChallenge;
 }
 
+// delete match challenge in db
 export async function deleteTeamMatchChallenge(db, matchChallengeId) {
     const deletedChallenge = await db.matchChallenge.delete({
         where: {
@@ -155,6 +174,8 @@ export async function deleteTeamMatchChallenge(db, matchChallengeId) {
 }
 
 // POST
+
+// create post in db
 export async function createTeamPost(db, teamId, content) {
     const newPost = await db.post.create({
         data: {
@@ -166,6 +187,7 @@ export async function createTeamPost(db, teamId, content) {
     return newPost;
 }
 
+// delete post in db
 export async function deleteTeamPost(db, postId) {
   const deletedPost = await db.post.delete({
       where: {
@@ -176,6 +198,7 @@ export async function deleteTeamPost(db, postId) {
   return deletedPost;
 }
 
+// create team post like in db
 export async function createTeamPostLike(db, postId, userId) {
     const newPostLike = await db.postLike.create({
         data: {
@@ -187,6 +210,7 @@ export async function createTeamPostLike(db, postId, userId) {
     return newPostLike
 }
 
+// delete team post like in db
 export async function deleteTeamPostLike(db, postId, userId) {
     const deletedPostLike = await db.postLike.deleteMany({
         where: {
@@ -198,6 +222,7 @@ export async function deleteTeamPostLike(db, postId, userId) {
     return deletedPostLike;
 }
 
+// get team posts in db (paginated)
 export async function getTeamPostsPagination(db, teamId, cursor=null) {
   let results;
   if (!cursor) {

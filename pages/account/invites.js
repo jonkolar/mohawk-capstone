@@ -17,23 +17,28 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 
+// /account/invites
+
+// FRONTEND
 const AccountInvites = ({ user, invites }) => {
     const theme = useTheme();
 
+    // states
     const [showChooseAliasModal, setShowChooseAliasModal] = useState(false)
     const [currentInvite, setCurrentInvite] = useState(null);
 
+    // refresh button handler
     const onRefreshInvites = async () => {
-        // Get Updated Invites
         location.reload()
     }
 
+    // invite answer buttons handler
     const onAnswerInvite = async (invite, answer) => {
         if (answer) {
             setCurrentInvite(invite)
             setShowChooseAliasModal(true)
         } else {
-            const response = await userAcceptTeamInviteCall(invite.id, answer)
+            await userAcceptTeamInviteCall(invite.id, answer)
             .then(response => {
                 location.reload();
             })
@@ -74,14 +79,15 @@ const AccountInvites = ({ user, invites }) => {
         </Box>
     )
 }
-
 export default AccountInvites;
 
 
-// This gets called on every request
+// BACKEND
 export async function getServerSideProps(context) {
+    // get current user session
     const session = await getServerSession(context.req, context.res, authOptions)
 
+    // get initial player invites
     const invites = await db.teamInvite.findMany({
         where: {
             userId: session.user.id
@@ -91,6 +97,6 @@ export async function getServerSideProps(context) {
         }
     })
 
-    // Pass data to the page via props
+    // send data to frontend
     return { props: { user: session.user, invites: JSON.parse(JSON.stringify(invites)) } };
 }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react"
 import { useTheme } from "@mui/styles";
 
@@ -9,15 +8,19 @@ import BoxLabelIconTopper from "@/components/BoxLabelIconTopper";
 import BadgeIcon from '@mui/icons-material/Badge';
 import { TextField, Button, Box } from '@mui/material';
 
-export default function AccountChooseUsername({  }) {
+// /account/choose-username 
+
+// FRONTEND
+export default function AccountChooseUsername() {
     const { data: session } = useSession()
-    const { push } = useRouter();
     const theme = useTheme();
 
+    // states
     const [username, setUsername] = useState('')
     const [available, setAvailable] = useState(false)
     const [error, setError] = useState(null);
 
+    // updates when username changes
     useEffect(()=>{
         const checkUsernameExists = async () => {
             setError(null)
@@ -33,10 +36,10 @@ export default function AccountChooseUsername({  }) {
         checkUsernameExists()
     }, [username])
 
+    // username select button handler
     const selectUsername = async () => {
         setError(null)
             try {
-                console.log(session)
                 const res = await updateUserCall(session.user.email, { username: username })
                 window.location.href = "/";
             } catch (error) {

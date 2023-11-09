@@ -11,6 +11,7 @@ import gamingController from "../public/gaming-controller.webp"
 import IconList from "@/components/IconList";
 import { Typography, Box } from "@mui/material";
 
+// homepage
 export default function Home({  }) {
     const theme = useTheme();
     

@@ -1,5 +1,6 @@
 import { apiClient } from "./base"
 
+// search teams api call
 export async function searchTeamsCall(search, cursor=null) {
     try {
         const response = await apiClient.post("/search/teams", {
@@ -12,6 +13,7 @@ export async function searchTeamsCall(search, cursor=null) {
     }
 }
 
+// search posts api call
 export async function searchPostsCall(search, cursor=null) {
     try {
         const response = await apiClient.post("/search/posts", {
@@ -24,6 +26,7 @@ export async function searchPostsCall(search, cursor=null) {
     }
 }
 
+// search users api call
 export async function searchUsersCall(search, cursor=null) {
     try {
         const response = await apiClient.post("/search/users", {

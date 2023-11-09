@@ -1,5 +1,6 @@
 import { apiClient } from "./base"
 
+// check if username exists api call
 export async function checkUsernameExistsCall(username) {
     try {
         const response = await apiClient.post("/user/check-username", {
@@ -11,6 +12,7 @@ export async function checkUsernameExistsCall(username) {
     }
 }
 
+// check if user exists api call
 export async function checkUserExistsCall(username) {
     try {
         const response = await apiClient.post("/user/exists", {
@@ -22,6 +24,7 @@ export async function checkUserExistsCall(username) {
     }
 }
 
+// update user api call
 export async function updateUserCall(email, updateData) {
     try {
         const response = await apiClient.post("/user/update-user", {
@@ -34,6 +37,7 @@ export async function updateUserCall(email, updateData) {
     }
 }
 
+// accept user team invite api call
 export async function userAcceptTeamInviteCall(inviteId, answer, aliasId="") {
     try {
         const response = await apiClient.post("/user/invite-answer", {
@@ -47,6 +51,7 @@ export async function userAcceptTeamInviteCall(inviteId, answer, aliasId="") {
     }
 }
 
+// add user alias api call
 export async function userAddAliasCall(gameId, alias) {
     try {
         const response = await apiClient.post("/user/alias/create", {
@@ -59,6 +64,7 @@ export async function userAddAliasCall(gameId, alias) {
     }
 }
 
+// delete user alias api call
 export async function userDeleteAliasCall(aliasId) {
     try {
         const response = await apiClient.post("/user/alias/delete", {
@@ -70,6 +76,7 @@ export async function userDeleteAliasCall(aliasId) {
     }
 }
 
+// retrieve all user aliases api call
 export async function userRetrieveAllAliasCall(userId, gameId = null) {
     try {
         const response = await apiClient.post("/user/alias/all", {

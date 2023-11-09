@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useSession } from "next-auth/react"
 import moment from "moment";
-
 
 import { db } from "@/utils/db-server";
 import { cancelTeamMatchCall } from "@/utils/api/team-api";
@@ -14,6 +12,9 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useTheme } from "@mui/styles";
 import PageNotFound from "@/components/PageNotFound";
 
+// /matches/[matchId]
+
+// FRONTEND
 export const TeamBox = ({ team, theme }) => {
     return (
         <Box>
@@ -33,11 +34,11 @@ export const TeamBox = ({ team, theme }) => {
 
 export default function MatchPage({ match }) {
     const { data: session } = useSession()
-    
     const theme = useTheme();
 
     const isTeamOwner = session && match ? match.team1.ownerId == session.user.id || match.team2.ownerId == session.user.id : false
 
+    // on cancel match button clicked handler
     const onCancelMatchClickedHandler = async () => {
         await cancelTeamMatchCall(match.id)
             .then(data =>{
@@ -74,10 +75,12 @@ export default function MatchPage({ match }) {
 }
 
 
-// This gets called on every request
+// BACKEND
 export async function getServerSideProps({ req, res, query }) {
+    // query parameters
     const matchId = query.matchId
     
+    // retrieve match
     let match = await db.match.findUnique({
         where: {
             id: parseInt(matchId)
@@ -107,6 +110,6 @@ export async function getServerSideProps({ req, res, query }) {
     })
     if (match) match = JSON.parse(JSON.stringify(match))
    
-    // Pass data to the page via props
+    // send data to frontend
     return { props: { match: match } };
 }

@@ -2,6 +2,9 @@ import { getProviders, signIn } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./api/auth/[...nextauth]";
 
+// /sign-in (mostly unused, anytime user hits page they are redirected)
+
+// FRONTEND
 export default function SignIn({ providers }){
   return (
     <>
@@ -16,6 +19,7 @@ export default function SignIn({ providers }){
   )
 }
 
+// BACKEND
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   
@@ -24,9 +28,9 @@ export async function getServerSideProps(context) {
   // To avoid an infinite loop!
   if (session) {
     if (!session.user.username) {
-      return { redirect: { destination: "/profile/choose-username" } };
+      return { redirect: { destination: "/profile/choose-username" } }; // redirect to /choose-username
     }
-    return { redirect: { destination: "/" } };
+    return { redirect: { destination: "/" } }; // redirect to home
   }
 
   const providers = await getProviders();

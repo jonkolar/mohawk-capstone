@@ -5,6 +5,7 @@ import theme from "@/utils/theme";
 import "../app/globals.css";
 import TopNavbar from "../components/TopNavbar"
 
+// Root
 export default function App({
   Component,
   pageProps: { session, ...pageProps },

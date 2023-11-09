@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
+// UI theme
 export default createTheme({
     palette: {
         primary: {

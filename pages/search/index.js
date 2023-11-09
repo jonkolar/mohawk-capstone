@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
-
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 
 import Link from "@/components/Link";
 import PostList from "@/components/PostList";
 import TeamList from "@/components/TeamList";
+import { searchTeamsCall, searchPostsCall, searchUsersCall } from "@/utils/api/search-api";
 
 import { useTheme } from "@mui/styles";
 import { TextField, InputAdornment, Button, Typography } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Tabs, Tab, } from "@mui/material";
 
-import { searchTeamsCall, searchPostsCall, searchUsersCall } from "@/utils/api/search-api";
-
+// FRONTEND
 function TabPanel({ children, value, index }) {
     return (
         <div>
@@ -27,14 +26,13 @@ function TabPanel({ children, value, index }) {
 }
 
 export default function Search({  }) {
-    const { data: session } = useSession();
     const router = useRouter()
     const theme = useTheme();
 
+    // states
     const [value, setValue] = useState(0);
- 
     const [search, setSearch] = useState('');
-    const [results, setResults] = useState({
+    const [results, setResults] = useState({ // search results
         teams: [],
         posts: [],
         users: [],
@@ -44,12 +42,13 @@ export default function Search({  }) {
         posts: false,
         users: false
     })
-    const [resultsCursors, setResultsCursors] = useState({
+    const [resultsCursors, setResultsCursors] = useState({ // for pagination
         teams: null,
         posts: null,
         users: null,
     })
 
+    // Utility function to add new results to results state
     const addToResults = ({ newTeams=[], newPosts=[], newUsers=[], }) => {
         setResults({
             teams: [...results.teams, ...newTeams],
@@ -58,6 +57,7 @@ export default function Search({  }) {
         })
     }
 
+    // utility function to update result cursors
     const updateResultsCursors = ({ teamsCursor=null, postsCursor=null, usersCursor=null}) => {
         setResultsCursors({
             teams: teamsCursor ? teamsCursor : resultsCursors.teams,
@@ -66,6 +66,7 @@ export default function Search({  }) {
         })
     }
 
+    // initial search
     useEffect(() => {
         const initialSearchCall = async (search) => {
             let initialTeams = []
@@ -111,6 +112,7 @@ export default function Search({  }) {
         }
     }, [router.isReady, router.query])
 
+    // search submit handler
     const onSubmitSearchHandler = (e) => {
         if (e.key == 'Enter') {
             if (search)
@@ -118,10 +120,12 @@ export default function Search({  }) {
         }
     }
 
+    // tab change handler
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    // show more teams button handler
     const onShowMoreTeamsButtonClicked = async () => {
         await searchTeamsCall(search, resultsCursors.teams)
         .then(data => {
@@ -133,6 +137,7 @@ export default function Search({  }) {
         })
     }
 
+    // show more posts button handler
     const onShowMorePostsButtonClicked = async () => {
         await searchPostsCall(search, resultsCursors.posts)
         .then(data => {
@@ -143,6 +148,7 @@ export default function Search({  }) {
         })
     }
 
+    // show more users button handler
     const onShowMoreUsersButtonClicked = async () => {
         await searchUsersCall(search, resultsCursors.users)
         .then(data => {

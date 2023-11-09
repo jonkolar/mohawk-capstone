@@ -22,11 +22,14 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
+// /teams/[teamId]
+
+// FRONTEND
 export default function TeamPage({ team, initialPosts, matches, challenges }) {
     const theme = useTheme();
-
     const { data: session } = useSession()
 
+    // states
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
     const [showCreatePostModal, setShowCreatePostModal] = useState(false);
     const [showSendMatchChallengeModal, setShowSendMatchChallengeModal] = useState(false);
@@ -42,6 +45,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
     const isOwner = session && team ? session.user.id == team.ownerId : false;
     const postsToDisplay = 3;
 
+    // invite player handler
     const onInvitePlayerHandler = async (username) => {
         await invitePlayerCall(username, team.id)
             .then(data => {
@@ -49,6 +53,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
             })
     }
 
+    // delete team button handler
     const onDeleteTeamHandler = async (teamId) => {
         await deleteTeamCall(teamId)
             .then(data => {
@@ -60,6 +65,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
             })
     }
 
+    // previous posts button handler
     const onPrevPostsHandler = async () => {
         const newPostsOffset = postsOffset - postsToDisplay
         setPostsOffset(newPostsOffset);
@@ -68,6 +74,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
             setPrevButtonDisabled(true);
     }
 
+    // next posts button handler
     const onNextPostsHandler = async () => {
         const hitEndOfCurrentPostsList = postsOffset >= (posts.length - posts.length % postsToDisplay) - postsToDisplay
         if (hitEndOfCurrentPostsList){
@@ -161,11 +168,12 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
 }
 
 
-// This gets called on every request
+// BACKEND
 export async function getServerSideProps({ req, res, query }) {
+    // retrieve query parameters
     const teamId = query.teamId
     
-    // Team
+    // retrieve team info
     const team = JSON.parse(JSON.stringify(await db.team.findUnique({
         where: {
             id: parseInt(teamId)
@@ -182,7 +190,7 @@ export async function getServerSideProps({ req, res, query }) {
         },
     })))
 
-    // Posts
+    // retrieve team posts
     const initialPosts = JSON.parse(JSON.stringify(await db.post.findMany({
         take: 3,
         where: {
@@ -207,7 +215,7 @@ export async function getServerSideProps({ req, res, query }) {
     :
     false
 
-    // Matches
+    // retrieve team matches
     const matches = JSON.parse(JSON.stringify(await db.match.findMany({
         where: {
             OR: [
@@ -224,6 +232,7 @@ export async function getServerSideProps({ req, res, query }) {
         }
     })))
 
+    // retrieve team match challenges
     const challenges = JSON.parse(JSON.stringify(await db.matchChallenge.findMany({
         where: {
             receiverTeamId: parseInt(teamId)
@@ -237,7 +246,7 @@ export async function getServerSideProps({ req, res, query }) {
         }
     })))
    
-    // Pass data to the page via props
+    // send data to frontend
     return { props: { 
         team: team, 
         initialPosts: {
