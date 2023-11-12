@@ -1,10 +1,11 @@
 import { apiClient } from "./base"
 
 // check if team exists api call
-export async function teamExistsCall(teamId) {
+export async function teamExistsCall(teamId, gameId) {
     try {
         const response = await apiClient.post("/team/exists", {
-            teamId: teamId
+            teamId: teamId,
+            gameId: gameId
         });
         return response.data
     } catch (error) {

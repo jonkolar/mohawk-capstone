@@ -8,12 +8,16 @@ export default async function TeamExistsHandler(req, res) {
 
   // retrieve payload parameters
   let teamId = req.body.teamId
+  let gameId = req.body.gameId
 
   // check if team exists
   let exists = false;
   const team = await getTeam(db, parseInt(teamId));
 
-  if (team)
+  console.log(gameId)
+  console.log(teamId);
+
+  if (team && team.gameId == gameId)
     exists = true;
 
   // return result

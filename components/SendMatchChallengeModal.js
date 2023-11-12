@@ -22,7 +22,7 @@ export default function CreateMatchModal({ team, open, setModal }) {
             return;
         }
 
-        await teamExistsCall(e.target.value)
+        await teamExistsCall(e.target.value, team.gameId)
         .then(({ exists }) => {
             setTeamExists(exists);
         })
@@ -53,7 +53,8 @@ export default function CreateMatchModal({ team, open, setModal }) {
                 <form method="POST" onSubmit={handleSubmit}>
                     <FormControl sx={{display: 'flex', gap: 2}}>
                         <TextField id="team-id" label="Team Id" type="number" variant="outlined" color={!teamExists || team.id == teamId ? "error" : "success"}
-                            onChange={onTeamIdChangedHandler} value={teamId} required/>
+                            onChange={onTeamIdChangedHandler} value={teamId} required />
+                        <Typography fontSize={11} fontStyle={"italic"} sx={{mt: 0}}>Can only challenge other {team.game.name} teams.</Typography>
                         <Box sx={{display: 'flex', flexDirection: 'row'}}>
                             <Typography variant="h6" sx={{mr: 1}}>Date:</Typography>
                             <input
