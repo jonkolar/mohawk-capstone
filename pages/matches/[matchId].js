@@ -53,7 +53,7 @@ export default function MatchPage({ match }) {
     return !match ? <PageNotFound label="Match Doesn't Exist" />
     : (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center'}}>
-            <Box sx={{display: 'flex', gap: 2, justifyContent: 'center', margin: 5, gap: 5}}>
+            <Box sx={{display: 'flex', gap: 2, justifyContent: 'center', margin: 5, gap: 5, flexWrap: 'wrap-reverse'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 5, alignItems: 'center'}}>
                     <TeamBox team={match.team1} theme={theme}/>
                     <Typography variant="h4" color={theme.palette.secondary.main}>VS</Typography>
@@ -64,6 +64,7 @@ export default function MatchPage({ match }) {
                     <Box sx={{backgroundColor: theme.palette.primary.main, borderRadius: theme.border.radius, padding: 2, width: 250, flex: 1}}>
                         <Typography color={theme.palette.white}>Match Id: {match.id}</Typography>
                         <Typography color={theme.palette.white}>Date: {moment(match.date).format("MMM Do YYYY")}</Typography>
+                        <Typography color={theme.palette.white}>Game: {match.team1.game.name}</Typography>
                     </Box>
                 </Box>
             </Box>
@@ -93,7 +94,8 @@ export async function getServerSideProps({ req, res, query }) {
                             alias: true,
                             user: true
                         }
-                    }
+                    },
+                    game: true
                 }
             },
             team2: {
