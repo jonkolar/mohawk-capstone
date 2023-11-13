@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-export default function AddAliasModal({ open, setModal, user }) {
+export default function AddAliasModal({ open, setModal }) {
     const [games, setGames] = useState([])
     const [gameId, setGameId] = useState(games.length > 0 ? games[0].id : null)
     const [alias, setAlias] = useState('')

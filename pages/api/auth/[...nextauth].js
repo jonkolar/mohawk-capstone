@@ -24,6 +24,8 @@ export const authOptions = {
       session.user.username = user.username
       session.user.id = user.id
       session.user.admin = user.admin
+      session.user.banned = user.banned
+
       return session
     }
   }

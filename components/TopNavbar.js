@@ -39,9 +39,13 @@ function TopNavbar() {
     setAnchorElUser(null);
   };
 
+  // *navbar is used in entire site so doing 'middleware' logic because nextauth doesn't support nextjs middleware yet
   // if user is signed in but hasn't chosen a username, redirect to choose-username page
   if (session && !session.user.username && location.pathname != "/account/choose-username")
     location.replace("/account/choose-username");
+  // if user is banned, redirect to banned page
+  if (session && session.user.banned && location.pathname != "/banned")
+    location.replace("/banned")
 
   return (
     <AppBar color="primary" position="static" sx={{ backgroundColor: theme.primary, borderBottom: 3, borderBottomColor: theme.palette.secondary.main }} elevation={0}>
