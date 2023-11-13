@@ -12,6 +12,8 @@ import UsersPage, { getServerSideProps as usersPageProps } from "@/pages/users/[
 import AccountTeams, { getServerSideProps as teamsPageProps} from "@/pages/account/teams";
 import Admin, { getServerSideProps as adminPageProps } from "@/pages/admin";
 
+// frontend tests require a test user in development database { id: 'test', username: 'test', 'admin': true }
+
 jest.mock("next-auth/react", () => {
     const originalModule = jest.requireActual('next-auth/react');
     const mockSession = {
