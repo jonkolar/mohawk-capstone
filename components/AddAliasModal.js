@@ -68,7 +68,7 @@ export default function AddAliasModal({ open, setModal, user }) {
                         </Select>
 
                         <TextField id="alias" label="Alias" variant="outlined" required={true}
-                            onChange={(e) => setAlias(e.target.value)} value={alias} />
+                            onChange={(e) => setAlias(e.target.value)} value={alias} inputProps={{ maxLength: 30 }}/>
 
                         <Button type="submit" variant="contained">Add</Button>
                     </FormControl>

@@ -39,7 +39,7 @@ export default function CreatePostModal({ team, open, setModal }) {
             >
                 <form method="POST" onSubmit={handleSubmit}>
                     <FormControl sx={{display: 'flex', gap: 2}}>
-                        <TextField id="post-content" label="Content" variant="outlined" required={true} onChange={(e) => setContent(e.target.value)} value={content} />
+                        <TextField id="post-content" label="Content" variant="outlined" required={true} onChange={(e) => setContent(e.target.value)} value={content} inputProps={{ maxLength: 120 }}/>
                         <Button type="submit" variant="contained">Create</Button>
                     </FormControl>
                 </form>

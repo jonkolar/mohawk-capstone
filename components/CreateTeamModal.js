@@ -44,7 +44,7 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
                 <form method="POST" onSubmit={handleSubmit}>
                     <FormControl sx={{display: 'flex', gap: 2}}>
                         <TextField id="team-name" label="Name" variant="outlined" required={true}
-                            onChange={(e) => setName(e.target.value)} value={name}/>
+                            onChange={(e) => setName(e.target.value)} value={name} inputProps={{ maxLength: 30 }}/>
 
                         <Select
                             labelId="team-game-label"
@@ -58,7 +58,7 @@ export default function CreateTeamModal({ user, open, setModal, games }) {
                         </Select>
 
                         <TextField id="team-description" label="Description" variant="outlined" required={true}
-                            onChange={(e) => setDescription(e.target.value)} value={description} />
+                            onChange={(e) => setDescription(e.target.value)} value={description} inputProps={{ maxLength: 75 }}/>
 
 
                         <Button type="submit" variant="contained">Submit</Button>
