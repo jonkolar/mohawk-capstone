@@ -1,4 +1,3 @@
-import { useSession, signIn, signOut } from "next-auth/react"
 import Image from "next/image";
 
 import { useTheme } from '@mui/material/styles';
@@ -35,6 +34,7 @@ export default function Home({  }) {
                 src={gamingController}
                 height={250}
                 width={250}
+                alt="gaming controller"
               />
               <IconList 
                 items={[

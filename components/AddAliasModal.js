@@ -20,7 +20,7 @@ export default function AddAliasModal({ open, setModal, user }) {
         const retrieveGames = async () => {
             const data = await retrieveGamesCall();
             setGames(data.games)
-            if (data.games.length >= 0)
+            if (data.games && data.games.length >= 0)
                 setGameId(data.games[0].id)
         }
 

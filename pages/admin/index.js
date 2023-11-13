@@ -176,9 +176,10 @@ export async function getServerSideProps(context) {
         return { redirect: { destination: "/" } };
     }
 
+    console.log
+
     // prepare data
     let data = {}
-
 
     // Query signups by month data from database then downcast
     const userCreatedQueryResult = await db.$queryRaw`SELECT 
