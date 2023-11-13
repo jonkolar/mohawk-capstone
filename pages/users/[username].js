@@ -77,11 +77,18 @@ export async function getServerSideProps({ req, res, query }) {
     // retrieve user teams
     const teams = await db.team.findMany({
         where: {
-            players: {
-                some: {
-                    userId: user.id
-                }
-            }
+            OR: [
+                {
+                    ownerId: user.id,
+                },
+                {
+                    players: {
+                        some: {
+                            userId: user.id
+                        }
+                    }
+                },
+            ]
         },
         include: {
             game: true
