@@ -21,6 +21,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import GroupsIcon from "@mui/icons-material/Groups";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import EditTeamProfileModal from "@/components/EditTeamProfileModal";
 
 // /teams/[teamId]
 
@@ -30,6 +31,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
     const { data: session } = useSession()
 
     // states
+    const [showEditTeamProfileModal, setShowEditTeamProfileModal] = useState(false);
     const [showInvitePlayerModal, setShowInvitePlayerModal] = useState(false);
     const [showCreatePostModal, setShowCreatePostModal] = useState(false);
     const [showSendMatchChallengeModal, setShowSendMatchChallengeModal] = useState(false);
@@ -115,6 +117,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
                     <Typography color={theme.palette.white}>Id: {team.id}</Typography>
                     <Typography color={theme.palette.white}>Owner: {team.owner.username}</Typography>
                 </Box>
+                {isOwner && <Button variant="contained" onClick={() => setShowEditTeamProfileModal(true)} sx={{mt: 1}}>Edit</Button>}
             </Box>
 
             <Box sx={{display: 'flex', flexDirection: 'column', gap: 5, minWidth: '50%'}}>
@@ -159,6 +162,7 @@ export default function TeamPage({ team, initialPosts, matches, challenges }) {
             {isOwner && 
                     <Button onClick={() => onDeleteTeamHandler(team.id)} variant="contained" color="error" sx={{marginTop: 1}}>Delete Team</Button>}
 
+            <EditTeamProfileModal open={showEditTeamProfileModal} setModal={setShowEditTeamProfileModal} team={team}/>
             <InvitePlayerModal open={showInvitePlayerModal} setModal={setShowInvitePlayerModal} invitePlayerHandler={onInvitePlayerHandler} team={team}/>
             <CreatePostModal open={showCreatePostModal} setModal={setShowCreatePostModal} team={team}/>
             <SendMatchChallengeModal open={showSendMatchChallengeModal} setModal={setShowSendMatchChallengeModal} team={team}/>

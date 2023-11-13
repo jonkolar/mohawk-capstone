@@ -40,6 +40,20 @@ export async function deleteTeamCall(teamId) {
     }
 }
 
+// edit team profile api call
+export async function editTeamProfileCall(teamId, name, description) {
+    try {
+        const response = await apiClient.post("/team/edit", {
+            teamId: teamId,
+            name: name,
+            description: description
+        });
+        return response.data
+    } catch (error) {
+        return false
+    }
+}
+
 // invite player to team api call
 export async function invitePlayerCall(username, teamId) {
     try {

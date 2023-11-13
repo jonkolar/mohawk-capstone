@@ -25,6 +25,21 @@ export async function createTeam(db, ownerId, name, gameId, description) {
     return newTeam;
 }
 
+// get team from db
+export async function editTeam(db, teamId, name, description) {
+  const team = await db.team.update({
+      where: {
+        id: teamId,
+      },
+      data: {
+        name: name,
+        description: description
+      }
+    })
+
+    return team;
+}
+
 // delete team in db
 export async function deleteTeam(db, teamId) {
     const deletedTeam = await db.team.delete({
